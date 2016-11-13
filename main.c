@@ -3,10 +3,21 @@
 #include <string.h>
 #include <stdio_ext.h>
 
+void siteMenu();
 void styleMenu();
 void examMenu();
 
+
 int main(){
+
+    siteMenu();
+    return 0;
+
+}
+
+
+void siteMenu(){
+
     system("clear");
     int opcao = -1;
 
@@ -50,7 +61,6 @@ int main(){
 
     }
 
-    return 0;
 }
 
 void styleMenu(){
@@ -84,7 +94,7 @@ void styleMenu(){
 
             case 0:
                 system("clear");
-                main();
+                siteMenu();
                 break;
 
             default:
@@ -129,7 +139,7 @@ void examMenu(){
 
             case 0:
                 system("clear");
-                main();
+                siteMenu();
                 break;
 
             default:
