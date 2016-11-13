@@ -5,25 +5,24 @@
 #define MAX 100
 
 
-typedef struct
-{
+typedef struct{
        char nome[MAX];
        char uf[MAX];
        char tipo[MAX];
 
 }faculdades; 
 
-//int guardaPosicao = 0;
+int guardaPosicao = 0;
 
 //Prototipos
 void validaOpcao(int *pOpcao);
 void cadastro();
-//void editaDados();
+void editaDados();
 void consulta();
 void deleta();
 void validaNome(char *pNome);
 void validaConfirma(int *pComfima);
-//void buscaChave(char *pNome);
+void buscaChave(char *pNome);
 
 int main(void)
 {
@@ -40,11 +39,10 @@ int main(void)
         switch (opcao){
             case 1: cadastro();
                break;
-            case 2: //editaDados();
+            case 2: editaDados();
                 break;
             case 3: consulta();
                 break;
-	
             case 4: deleta();
         }
 
@@ -53,7 +51,6 @@ int main(void)
 }
 
 void validaOpcao(int *pOpcao){
-
 	while(*pOpcao < 1 || *pOpcao > 5){
 		printf("Opcao invalida digite novamente \n");
 		scanf("%d",pOpcao);
@@ -246,7 +243,7 @@ void consulta(){
 
 }
 
-/*void editaDados()
+void editaDados()
 {
     //Declarações:
     faculdades dados;
@@ -261,10 +258,13 @@ void consulta(){
 
     //Instruções:
 
-    printf("Informe o nome da faculdades que deseja editar: \n");
+    printf("Informe o nome da faculdade que deseja editar: \n");
     fgets(chave,MAX,stdin);
 
     __fpurge(stdin);
+    
+    validaNome(chave);
+
 
     if ((pArquivos = fopen("faculdades.txt","r")) == NULL){
         printf("Erro ao abrir o arquivo");
@@ -279,23 +279,21 @@ void consulta(){
         return;
     }
 
-    printf("Esse e a faculdade que deseja editar? (digite 1 para sim e 0 para nao)\n");
+    printf("Essa e a faculdade que deseja editar? (digite 1 para sim e 0 para nao)\n");
     scanf("%d",&escolha);
     __fpurge(stdin);
 
     validaConfirma(&escolha);
 
-    switch(escolha)
-    {
-    case '0': return;
-	}
+    switch(escolha){
+    	case 0: return;
+    }
 
     fseek(pArquivos,((guardaPosicao - 1) * sizeof(faculdades)), SEEK_SET);
 
     fread(&dados,sizeof(faculdades),1,pArquivos);
 
-    while (opcao2 != 5)
-    {
+    while (opcao2 != 5){
         printf("Informe o dado que deseja alterar \n");
         printf("1. Nome \n2. UF \n3. Tipo \n4. Apagar a faculdade \n5. Sair\n");
         printf("Escolha a opcao que deseja: ");
@@ -304,8 +302,7 @@ void consulta(){
 
         validaOpcao(&opcao2);
 
-        switch(opcao2)
-        {
+        switch(opcao2){
             case 1:
                 printf("Informe o novo nome \n");
                 fgets(dados.nome,MAX,stdin);
@@ -317,18 +314,16 @@ void consulta(){
 		validaNomeChave(dados.nome);
 
                 fseek(pArquivos,((guardaPosicao - 1) * sizeof(faculdades)), SEEK_SET);
-
-   				if (fwrite(&dados,sizeof(faculdades),1,pArquivos) == 1)
-   				{
-   					 printf("\nAlteracao realizada com sucesso\n");
-    			}
-
-
-                printf("NOME = %s \n",dados.nome);
-                printf("UF = %s \n",dados.uf);
-		printf("TIPO = %s \n",dados.tipo);
-
-
+				
+				if (fwrite(&dados,sizeof(faculdades),1,pArquivos) == 1){
+        				printf("\nAlteracao realizada com sucesso\n");
+					printf("NOME = %s \n",dados.nome);
+                			printf("UF = %s \n",dados.uf);
+					printf("TIPO = %s \n",dados.tipo);
+    				}
+				else{
+					printf("Erro\n");
+				}
                 break;
             case 2:
                 printf("Informe a nova UF \n");
@@ -340,15 +335,15 @@ void consulta(){
 
 				fseek(pArquivos,((guardaPosicao - 1) * sizeof(faculdades)), SEEK_SET);
 
-   				if (fwrite(&dados,sizeof(faculdades),1,pArquivos) == 1)
-   				{
+   				if (fwrite(&dados,sizeof(faculdades),1,pArquivos) == 1){
    					printf("\nAlteracao realizada com sucesso\n");
-    			}
-
-                printf("NOME = %s \n",dados.nome);
-                printf("UF = %s \n",dados.uf);
-		printf("TIPO = %s \n",dados.tipo);
-
+					printf("NOME = %s \n",dados.nome);
+                			printf("UF = %s \n",dados.uf);
+					printf("TIPO = %s \n",dados.tipo);
+    				}
+				else{
+					printf("Erro\n");
+				}
 
                 break;
 
@@ -362,43 +357,37 @@ void consulta(){
 
                 fseek(pArquivos,((guardaPosicao - 1) * sizeof(faculdades)), SEEK_SET);
 
-   				if (fwrite(&dados,sizeof(faculdades),1,pArquivos) == 1)
-   				{
+   				if (fwrite(&dados,sizeof(faculdades),1,pArquivos) == 1){
    					 printf("\nAlteracao realizada com sucesso\n");
-    			}
-
-                printf("NOME = %s \n",dados.nome);
-                printf("UF = %s \n",dados.uf);
-		printf("TIPO = %s \n",dados.tipo);
-
+					printf("NOME = %s \n",dados.nome);
+                			printf("UF = %s \n",dados.uf);
+					printf("TIPO = %s \n",dados.tipo);
+    				}
+				else{
+					printf("Erro\n");
+				}
 
                 break;
             case 4:
                 printf("Deseja mesmo deletar a faculdade(digite 1 para sim ou 0 para nao)\n");
                 scanf("%d",&confirmacao);
-                fflush(stdin);
+                __fpurge(stdin);
 
                 validaConfirma(&confirmacao);
 
-                switch(confirmacao)
-				{
+                switch(confirmacao){
                 	case 0: return;
-				}
+		}
 
-                if((arquivoNovo = fopen("copia.txt","wt")) == NULL)
-                {
+                if((arquivoNovo = fopen("copia.txt","wt")) == NULL){
                 }
 
                 rewind(pArquivos);
 
-                while(!feof(pArquivos))
-                {
-                    if(fread(&dados,sizeof(faculdades),1,pArquivos) == 1)
-                    {
-                        if(strcmp(dados.nome,chave)!=0)
-                        {
-                            if(fwrite(&dados,sizeof(faculdades),1,arquivoNovo) == 1)
-                            {
+                while(!feof(pArquivos)){
+                    if(fread(&dados,sizeof(faculdades),1,pArquivos) == 1){
+                        if(strcmp(dados.nome,chave)!=0){
+                            if(fwrite(&dados,sizeof(faculdades),1,arquivoNovo) == 1){
                             }
                         }
                     }
@@ -411,9 +400,12 @@ void consulta(){
                 rename("copia.txt","faculdades.txt");
 
                 printf("\nExclusao da falcudade realizada com sucesso\n");
+		return;
         }
     }
+
     fclose(pArquivos);
+
     return;
 }
 
@@ -430,7 +422,7 @@ void buscaChave(char *pNome){
      	while (!feof(pArquivo)){
 		contador++;
         	if ((fread(&cadastro,sizeof(faculdades),1,pArquivo)) == 1){
-			if (strcmp(pNome,cadastro.nome) == 1){
+			if (strcmp(pNome,cadastro.nome) == 0){
                 		printf("Nome = %s \n",cadastro.nome);
                 		printf("UF = %s \n",cadastro.uf);
                 		printf("Tipo = %s \n",cadastro.tipo);
@@ -438,8 +430,5 @@ void buscaChave(char *pNome){
 			}
 		}
 	}
-
 	fclose(pArquivo);
-
 }
-*/
