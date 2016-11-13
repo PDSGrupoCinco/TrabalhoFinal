@@ -2,11 +2,34 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio_ext.h>
+#define MAX 100
+
+// Protótipos MENU
 
 void siteMenu();
 void styleMenu();
 void examMenu();
+void validaConfirma(int *pComfima);
+
+//Protóripos Vestibulares
+
 void exams();
+void registerExam();
+
+// Struct Vestibular
+
+typedef struct
+{
+
+    char nome[MAX];
+    char uf[MAX];
+    char instituicao[MAX];
+    char fase[MAX];
+    char descricao[300];
+    char chamada[MAX];
+
+}vestibular;
+
 
 
 int main(){
@@ -189,7 +212,7 @@ void exams(){
 
             case 1:
                 system("clear");
-                printf("Cadastro\n");
+                registerExam();
                 break;
 
             case 2:
@@ -228,6 +251,84 @@ void exams(){
 
 }
 
+
+//Cadastrar Vestibular
+
+void registerExam(){
+
+    FILE *arqRegistro;
+    vestibular evento;
+    int opcao = -1;
+
+    arqRegistro = fopen("Vestibulares.txt", "a+");
+
+    if(!arqRegistro){
+        printf("O arquivo nao pode ser encontrado e/ou aberto!");
+        system("PAUSE");
+        return;
+    }
+
+    system("clear");
+    printf("Registre o Vestibular:\n");
+
+    printf("Nome: ");
+    fgets(evento.nome,MAX,stdin);
+    __fpurge(stdin);
+
+    printf("\nInstituicao: ");
+    fgets(evento.instituicao,MAX,stdin);
+    __fpurge(stdin);
+
+    printf("\nUnidade Federativa: ");
+    fgets(evento.uf,MAX,stdin);
+    __fpurge(stdin);
+
+    printf("\nFase: ");
+    fgets(evento.fase,MAX,stdin);
+    __fpurge(stdin);
+
+    printf("\nChamada: ");
+    fgets(evento.chamada,MAX,stdin);
+    __fpurge(stdin);
+
+    printf("\nDescricao: ");
+    fgets(evento.descricao,MAX,stdin);
+    __fpurge(stdin);
+
+    printf("\nDeseja salvar?\n");
+    printf("1 - Sim\n");
+    printf("0 - Nao\n");
+    scanf("%d", &opcao);
+    __fpurge(stdin);
+
+    validaConfirma(&opcao);
+
+    switch(opcao){
+        case 1:
+            system("clear");
+            fprintf(arqRegistro,"%s %s %s %s %s %s\n", evento.nome, evento.instituicao, evento.uf, evento.fase, evento.chamada, evento.descricao);
+            fclose(arqRegistro);
+            break;
+        case 2:
+            printf("Nao Salvar\n");
+            break;
+        default:
+            //Do nothing
+            break;
+    }
+
+}
+
+void validaConfirma(int *pConfirma)
+{
+
+    while(*pConfirma != 1 && *pConfirma != 0)
+    {
+        printf("Opcao invalida digite novamente \n");
+        scanf("%d",pConfirma);
+        __fpurge(stdin);
+    }
+}
 
 
 // Parte Lucas Penido e Lucas Siqueira
