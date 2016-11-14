@@ -370,7 +370,7 @@ void editaDados()
         printf("Faculdade inexistente!! \n");
         return;
     }
-    printf("\nEssa e a faculdade que deseja editar?\n1 - SIM\n2 - NAO\n");
+    printf("\nEssa e a faculdade que deseja editar?\n1 - SIM\n0 - NAO\n");
     scanf("%d",&escolha);
     __fpurge(stdin);
 
