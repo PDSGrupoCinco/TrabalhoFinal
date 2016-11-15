@@ -16,7 +16,7 @@ void examMenu();
 
 void exams();
 void registerExam();
-void listExam();
+void listExams();
 
 // Protótipos Faculdades/Universidades
 
@@ -227,7 +227,6 @@ void exams(){
     int opcao = -1;
 
     while(opcao != 0){
-        system("clear");
         printf("\t\t *** Vestibulares  ***\n");
         printf("1 - Cadastrar\n");
         printf("2 - Listar\n");
@@ -247,8 +246,7 @@ void exams(){
                 break;
 
             case 2:
-                system("clear");
-                printf("Listar\n");
+                listExams();
                 break;
 
             case 3:
@@ -359,7 +357,7 @@ void registerExam(){
     switch(opcao){
         case 1:
             system("clear");
-            fprintf(arqRegistro,"%s %s %s %s %s %d %.2f %s %s", evento.nome, evento.instituicao, evento.uf, evento.fase, evento.chamada, evento.vagas, evento.valor, evento.data, evento.descricao);
+            fwrite(&evento,sizeof(vestibular),1,arqRegistro);
             fclose(arqRegistro);
             break;
         case 2:
@@ -376,7 +374,87 @@ void registerExam(){
 
 //Listar Vestibular
 
+void listExams(){
 
+    vestibular eventos;
+    FILE *arqListagem;
+    int contador = 0;
+    int aux = 0;
+    int aux2 = 0;
+    int aux3 = 0;
+    int confirma;
+    vestibular *pMalloc;
+
+
+   system("clear");
+    if ((arqListagem = fopen("Vestibulares.txt","a+")) == NULL)
+    {
+        printf("Erro ao abrir o arquivo");
+        return;
+    }
+
+
+
+    while (fread(&eventos,sizeof(vestibular),1,arqListagem) == 1)
+    {
+        contador++;
+    }
+
+    if (contador == 0)
+    {
+        //LIMPA_TELA;
+        printf("Nenhum Vestibular Encontrado\n\n");
+        return;
+    }
+
+    rewind(arqListagem);
+
+    pMalloc = (vestibular *)malloc(contador * sizeof(vestibular));
+
+    while (fread(&pMalloc[aux],sizeof(vestibular),1,arqListagem) == 1)
+    {
+        aux++;
+    }
+
+    for(aux = 0; aux < contador - 1; aux++)
+    {
+        for(aux2 = aux + 1; aux2 < contador; aux2++)
+        {
+            if (strcmp(pMalloc[aux].nome,pMalloc[aux2].nome) > 0)
+            {
+                eventos = pMalloc[aux2];
+                pMalloc[aux2] = pMalloc[aux];
+                pMalloc[aux] = eventos;
+            }
+        }
+    }
+
+    printf("\t\t\t\t\t\tVestibulares Cadastrados\n\n");
+
+    while (aux3 != contador)
+    {
+        printf("Nome: %s Instituicao: %s UF: %s Fase: %s Chamada: %s Vagas: %d Valor: %.2f Data: %s Descricao: %s", pMalloc[aux3].nome, pMalloc[aux3].instituicao, pMalloc[aux3].uf, pMalloc[aux3].fase, pMalloc[aux3].chamada, pMalloc[aux3].vagas, pMalloc[aux3].valor, pMalloc[aux3].data, pMalloc[aux3].descricao);
+        aux3++;
+    }
+    printf("\n");
+
+    printf("0 - Voltar\n");
+    scanf("%d",&confirma);
+
+    __fpurge(stdin);
+
+    while(confirma != 0)
+    {
+        printf("Opcao invalida digite novamente \n");
+        scanf("%d",&confirma);
+        __fpurge(stdin);
+    }
+
+    system("clear");
+
+    fclose(arqListagem);
+
+}
 
 
 
