@@ -308,7 +308,7 @@ void registerExam(){
 
 
 
-    printf("\nInstituicao: ");
+    printf("\nSigla da Instituicao: ");
     fgets(evento.instituicao,MAX,stdin);
     __fpurge(stdin);
     validaNome(evento.instituicao);
@@ -341,6 +341,7 @@ void registerExam(){
 
     printf("\nData da prova: ");
     fgets(evento.data,MAX,stdin);
+    validaNome(evento.data);
     __fpurge(stdin);
 
     printf("\nDescricao: ");
@@ -358,7 +359,7 @@ void registerExam(){
     switch(opcao){
         case 1:
             system("clear");
-            fprintf(arqRegistro,"%s %s %s %s %s %s", evento.nome, evento.instituicao, evento.uf, evento.fase, evento.chamada, evento.descricao);
+            fprintf(arqRegistro,"%s %s %s %s %s %d %.2f %s %s", evento.nome, evento.instituicao, evento.uf, evento.fase, evento.chamada, evento.vagas, evento.valor, evento.data, evento.descricao);
             fclose(arqRegistro);
             break;
         case 2:
