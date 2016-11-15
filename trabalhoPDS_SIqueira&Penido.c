@@ -58,52 +58,77 @@ int main(void)
         case 3:
             lista();
             break;
-	case 4:
-	    busca();
-	    break;
+        case 4:
+            busca();
+            break;
         case 5:
             deleta();
-	    break;
+            break;
         }
     }
     return 0;
 }
 
-void busca(){
-	    int escolha;
-	    char busca[MAX];
+void busca()
+{
+    int escolha;
+    int confirma;
+    char busca[MAX];
 
-	    LIMPA_TELA;
-	    printf("Busca por:\n 1-Nome \n 2-UF \n 3-Tipo \n 4-Sair\n");
-	    printf("Escolha a opcao que deseja: ");
-	    scanf("%d",&escolha);
-	    validaMenuBusca(&escolha);
-	    __fpurge(stdin);
-	    switch(escolha){
-	    	case 1:
-			printf("informe o nome: \n");
-			fgets(busca,MAX,stdin);
-	           	__fpurge(stdin);
-	    		validaNome(busca);
-	    		buscaChave(busca);
-			return;
-			break;
-		case 2:
-			printf("informe a UF: \n");
-			fgets(busca,MAX,stdin);
-	           	__fpurge(stdin);
-	    		validaNome(busca);
-			buscaUf(busca);
-			return;
-			break;
-		case 3:
-			printf("informe o tipo: \n");
-			fgets(busca,MAX,stdin);
-	           	__fpurge(stdin);
-	    		validaNome(busca);
-			buscaTipo(busca);
-			return;
-	    }
+    LIMPA_TELA;
+    printf("\t\tBUSCAR\n\n");
+    printf("Busca por:\n 1-Nome \n 2-UF \n 3-Tipo \n 4-Sair\n");
+    printf("Escolha a opcao que deseja: ");
+    scanf("%d",&escolha);
+    validaMenuBusca(&escolha);
+    __fpurge(stdin);
+    switch(escolha)
+    {
+    case 1:
+        printf("informe o nome: \n");
+        fgets(busca,MAX,stdin);
+        __fpurge(stdin);
+        validaNome(busca);
+        LIMPA_TELA;
+        buscaChave(busca);
+        break;
+
+    case 2:
+        printf("informe a UF: \n");
+        fgets(busca,MAX,stdin);
+        __fpurge(stdin);
+        validaNome(busca);
+        LIMPA_TELA;
+        buscaUf(busca);
+        break;
+
+    case 3:
+        printf("informe o tipo: \n");
+        fgets(busca,MAX,stdin);
+        __fpurge(stdin);
+        validaTipo(busca);
+        LIMPA_TELA;
+        buscaTipo(busca);
+        break;
+
+    case 4:
+        LIMPA_TELA;
+        return;
+    }
+
+    printf("1 - Voltar\n");
+    scanf("%d",&confirma);
+
+    __fpurge(stdin);
+
+    while(confirma != 1)
+    {
+        printf("Opcao invalida digite novamente \n");
+        scanf("%d",&confirma);
+        __fpurge(stdin);
+    }
+
+    LIMPA_TELA;
 }
 
 void validaMenuBusca(int *pOpcao)
@@ -419,10 +444,10 @@ void editaDados()
         return;
     }
     LIMPA_TELA;
-    printf("\t\tEditar\n\n");
+    printf("\t\tALTERAR\n\n");
 
 
-    printf("Informe o nome da faculdade que deseja editar: \n");
+    printf("Informe o nome da faculdade que deseja alterar: \n");
     fgets(chave,MAX,stdin);
 
 
@@ -439,7 +464,7 @@ void editaDados()
         printf("Faculdade inexistente!! \n");
         return;
     }
-    printf("\nEssa e a faculdade que deseja editar?\n1 - SIM\n0 - NAO\n");
+    printf("\nEssa e a faculdade que deseja alterar?\n1 - SIM\n0 - NAO\n");
     scanf("%d",&escolha);
     __fpurge(stdin);
 
@@ -482,7 +507,6 @@ void editaDados()
             if (fwrite(&dados,sizeof(faculdades),1,pArquivos) == 1)
             {
                 LIMPA_TELA;
-                printf("\t\tEditar\n");
                 printf("\nAlteracao realizada com sucesso\n\n");
                 printf("Nome: %s \n",dados.nome);
                 printf("UF: %s \n",dados.uf);
@@ -493,7 +517,7 @@ void editaDados()
                 printf("Erro\n");
             }
             fclose(pArquivos);
-	    return;
+            return;
             break;
         case 2:
             printf("Informe a nova UF \n");
@@ -509,7 +533,6 @@ void editaDados()
             if (fwrite(&dados,sizeof(faculdades),1,pArquivos) == 1)
             {
                 LIMPA_TELA;
-                printf("\t\tEditar\n");
                 printf("\nAlteracao realizada com sucesso\n");
                 printf("NOME: %s \n",dados.nome);
                 printf("UF: %s \n",dados.uf);
@@ -520,22 +543,21 @@ void editaDados()
                 printf("Erro\n");
             }
             fclose(pArquivos);
-	    return;
+            return;
             break;
 
         case 3:
             printf("Informe o novo tipo\n");
             fgets(dados.tipo,MAX,stdin);
             __fpurge(stdin);
-	   validaNome(dados.tipo);
-	   validaTipo(dados.tipo);
+            validaNome(dados.tipo);
+            validaTipo(dados.tipo);
 
             fseek(pArquivos,((guardaPosicao - 1) * sizeof(faculdades)), SEEK_SET);
 
             if (fwrite(&dados,sizeof(faculdades),1,pArquivos) == 1)
             {
                 LIMPA_TELA;
-                printf("\t\tEditar\n");
                 printf("\nAlteracao realizada com sucesso\n");
                 printf("NOME: %s \n",dados.nome);
                 printf("UF: %s \n",dados.uf);
@@ -546,7 +568,7 @@ void editaDados()
                 printf("Erro\n");
             }
             fclose(pArquivos);
-	    return;
+            return;
             break;
         case 4:
             printf("Deseja mesmo deletar a faculdade(digite 1 para sim ou 0 para nao)\n");
@@ -692,16 +714,16 @@ void buscaTipo(char *pNome)
 
 void validaTipo(char *pTipo)
 {
-	validaNome(pTipo);
+    validaNome(pTipo);
 
-	while((strcmp(pTipo,"PARTICULAR\0") != 0) && (strcmp(pTipo,"PUBLICA\0") != 0))
-	{
-		printf("Tipo invalido, digite particular ou publica\n");
-		fgets(pTipo,MAX,stdin);
-		__fpurge(stdin);
-		validaNome(pTipo);
-	}
-	
+    while((strcmp(pTipo,"PARTICULAR\0") != 0) && (strcmp(pTipo,"PUBLICA\0") != 0))
+    {
+        printf("Tipo invalido, digite particular ou publica\n");
+        fgets(pTipo,MAX,stdin);
+        __fpurge(stdin);
+        validaNome(pTipo);
+    }
+
 
 }
 
