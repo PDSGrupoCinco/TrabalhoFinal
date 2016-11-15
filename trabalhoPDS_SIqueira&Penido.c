@@ -526,11 +526,9 @@ void editaDados()
         case 3:
             printf("Informe o novo tipo\n");
             fgets(dados.tipo,MAX,stdin);
-
-
             __fpurge(stdin);
-
-            validaNome(dados.nome);
+	   validaNome(dados.tipo);
+	   validaTipo(dados.tipo);
 
             fseek(pArquivos,((guardaPosicao - 1) * sizeof(faculdades)), SEEK_SET);
 
