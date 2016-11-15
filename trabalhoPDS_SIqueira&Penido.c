@@ -389,11 +389,11 @@ void lista()
     }
 
     printf("\t\tListar\n\n");
-    printf("Nome \t\t UF \t\t Tipo \n");
+    printf("Nome \n");
 
     while (aux3 != contador)
     {
-        printf("\n%s \t\t %s \t\t %s\n",pMalloc[aux3].nome,pMalloc[aux3].uf,pMalloc[aux3].tipo);
+        printf("\n%s\n",pMalloc[aux3].nome);
         aux3++;
     }
     printf("\n");
