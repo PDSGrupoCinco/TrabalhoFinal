@@ -220,11 +220,10 @@ void examMenu(){
 // Vestibulares - Vestibulares
 
 void exams(){
-    system("clear");
     int opcao = -1;
 
     while(opcao != 0){
-
+        system("clear");
         printf("\t\t *** Vestibulares  ***\n");
         printf("1 - Cadastrar\n");
         printf("2 - Listar\n");
@@ -279,7 +278,6 @@ void exams(){
 
 }
 
-
 //Cadastrar Vestibular
 
 void registerExam(){
@@ -302,22 +300,37 @@ void registerExam(){
     printf("Nome: ");
     fgets(evento.nome,MAX,stdin);
     __fpurge(stdin);
+    validaNome(evento.nome);
+
+
 
     printf("\nInstituicao: ");
     fgets(evento.instituicao,MAX,stdin);
     __fpurge(stdin);
+    validaNome(evento.instituicao);
+
+
 
     printf("\nUnidade Federativa: ");
     fgets(evento.uf,MAX,stdin);
     __fpurge(stdin);
+    validaNome(evento.uf);
+
 
     printf("\nFase: ");
     fgets(evento.fase,MAX,stdin);
     __fpurge(stdin);
+    validaNome(evento.fase);
+
+
 
     printf("\nChamada: ");
     fgets(evento.chamada,MAX,stdin);
     __fpurge(stdin);
+    validaNome(evento.chamada);
+
+
+
 
     printf("\nDescricao: ");
     fgets(evento.descricao,MAX,stdin);
@@ -334,11 +347,11 @@ void registerExam(){
     switch(opcao){
         case 1:
             system("clear");
-            fprintf(arqRegistro,"%s %s %s %s %s %s\n", evento.nome, evento.instituicao, evento.uf, evento.fase, evento.chamada, evento.descricao);
+            fprintf(arqRegistro,"%s %s %s %s %s %s", evento.nome, evento.instituicao, evento.uf, evento.fase, evento.chamada, evento.descricao);
             fclose(arqRegistro);
             break;
         case 2:
-            printf("Nao Salvar\n");
+            system("clear");
             break;
         default:
             //Do nothing
@@ -358,6 +371,7 @@ int university(void)
 // Instrucoes
     while (opcao != 5)
     {
+
         printf("\t\tFACULDADES\n\n");
         printf("1. Cadastrar \n2. Editar \n3. Listar \n4. Deletar \n5. Sair\n");
         printf("Escolha a opcao que deseja: ");
