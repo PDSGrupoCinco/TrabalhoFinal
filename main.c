@@ -9,18 +9,21 @@
 // Protótipos MENU
 
 void siteMenu();
-void styleMenu();
-void examMenu();
+void estiloMenu();
+void vestibularMenu();
 
 //Protótipos Vestibulares
 
-void exams();
-void registerExam();
-void listExams();
-void searchExam();
-void ufSearchExam(char *uf);
-void institutionSearchExam(char *sigla);
-void nameSearchExam(char *nome);
+void vestibulares();
+void cadastrarVest();
+void listarVest();
+void procurarVest();
+void apagaVest();
+void procurarUFVest(char *uf);
+void procurarInstitucaoVest(char *sigla);
+void procurarNomeVest(char *nome);
+void validaNomeVest(char *vestNome);
+void buscarVest(char *vestNome);
 
 // Protótipos Faculdades/Universidades
 
@@ -99,12 +102,12 @@ void siteMenu(){
 
             case 1:
                 system("clear");
-                styleMenu();
+                estiloMenu();
                 break;
 
             case 2:
                 system("clear");
-                examMenu();
+                vestibularMenu();
                 break;
 
             case 0:
@@ -128,7 +131,7 @@ void siteMenu(){
 
 // Menu ESTILO da aplicação
 
-void styleMenu(){
+void estiloMenu(){
 
     system("clear");
     int opcao = -1;
@@ -178,7 +181,7 @@ void styleMenu(){
 
 // Menu VESTIBULARES da aplicação
 
-void examMenu(){
+void vestibularMenu(){
 
     system("clear");
     int opcao = -1;
@@ -204,7 +207,7 @@ void examMenu(){
             case 2:
                 //AQUI ENTRA A FUNÇÃO RESPONSÁVEL PELOS VESTIBULARES - LUCAS SOARES E LUDE RIBEIRO
                 system("clear");
-                exams();
+                vestibulares();
                 break;
 
             case 0:
@@ -227,7 +230,7 @@ void examMenu(){
 // Parte Lucas S. Souza e Lude Ribeiro
 // Vestibulares - Vestibulares
 
-void exams(){
+void vestibulares(){
     int opcao = -1;
     system("clear");
     while(opcao != 0){
@@ -246,16 +249,16 @@ void exams(){
 
             case 1:
                 system("clear");
-                registerExam();
+                cadastrarVest();
                 break;
 
             case 2:
-                listExams();
+                listarVest();
                 break;
 
             case 3:
                 system("clear");
-                searchExam();
+                procurarVest();
                 break;
 
             case 4:
@@ -265,7 +268,7 @@ void exams(){
 
             case 5:
                 system("clear");
-                printf("Excluir\n");
+                apagaVest();
                 break;
 
             case 0:
@@ -286,7 +289,7 @@ void exams(){
 
 //Cadastrar Vestibular
 
-void registerExam(){
+void cadastrarVest(){
 
     FILE *arqRegistro;
     vestibular evento;
@@ -307,6 +310,7 @@ void registerExam(){
     fgets(evento.nome,MAX,stdin);
     __fpurge(stdin);
     validaNome(evento.nome);
+    validaNomeVest(evento.nome);
 
 
 
@@ -357,11 +361,16 @@ void registerExam(){
     __fpurge(stdin);
 
     validaConfirma(&opcao);
+    system("clear");
 
     switch(opcao){
         case 1:
             system("clear");
-            fwrite(&evento,sizeof(vestibular),1,arqRegistro);
+            if(fwrite(&evento,sizeof(vestibular),1,arqRegistro) == 1){
+                printf("\nCadastro realizado com sucesso!\n");
+            }else{
+                printf("\nHouve um erro no cadastro!\n");
+            }
             fclose(arqRegistro);
             break;
         case 2:
@@ -378,7 +387,7 @@ void registerExam(){
 
 //Listar Vestibular
 
-void listExams(){
+void listarVest(){
 
     vestibular eventos;
     FILE *arqListagem;
@@ -437,7 +446,7 @@ void listExams(){
 
     while (aux3 != contador)
     {
-        printf("Nome: %s Instituicao: %s UF: %s Fase: %s Chamada: %s Vagas: %d Valor: %.2f Data: %s Descricao: %s", pMalloc[aux3].nome, pMalloc[aux3].instituicao, pMalloc[aux3].uf, pMalloc[aux3].fase, pMalloc[aux3].chamada, pMalloc[aux3].vagas, pMalloc[aux3].valor, pMalloc[aux3].data, pMalloc[aux3].descricao);
+        printf("NOME: %s INSTITUICAO: %s UF: %s FASE: %s CHAMADA: %s VAGAS: %d VALOR: %.2fR$ DATA: %s DESCRICAO: %s", pMalloc[aux3].nome, pMalloc[aux3].instituicao, pMalloc[aux3].uf, pMalloc[aux3].fase, pMalloc[aux3].chamada, pMalloc[aux3].vagas, pMalloc[aux3].valor, pMalloc[aux3].data, pMalloc[aux3].descricao);
         aux3++;
     }
     printf("\n");
@@ -460,7 +469,7 @@ void listExams(){
 
 }
 
-void searchExam(){
+void procurarVest(){
 
     int opt = -1;
     char palavra[MAX];
@@ -487,7 +496,7 @@ void searchExam(){
                 fgets(palavra,MAX,stdin);
                 validaNome(palavra);
                 __fpurge(stdin);
-                nameSearchExam(palavra);
+                procurarNomeVest(palavra);
                 break;
 
             case 2:
@@ -497,7 +506,7 @@ void searchExam(){
                 fgets(palavra,MAX,stdin);
                 validaNome(palavra);
                 __fpurge(stdin);
-                institutionSearchExam(palavra);
+                procurarInstitucaoVest(palavra);
                 break;
 
             case 3:
@@ -506,7 +515,7 @@ void searchExam(){
                 printf("Digite a sigla da Unidade Federativa onde ocorrerá o evento: ");
                 fgets(palavra,MAX,stdin);
                 __fpurge(stdin);
-                ufSearchExam(palavra);
+                procurarUFVest(palavra);
                 break;
 
             case 0:
@@ -520,7 +529,7 @@ void searchExam(){
     system("clear");
 }
 
-void ufSearchExam(char *uf){
+void procurarUFVest(char *uf){
 
     vestibular eventos;
     FILE *arqListagem;
@@ -581,7 +590,7 @@ void ufSearchExam(char *uf){
     {
 
         if(strcmp(uf,pMalloc[aux3].uf) == 0){
-        printf("Nome: %s Instituicao: %s UF: %s Fase: %s Chamada: %s Vagas: %d Valor: %.2f Data: %s Descricao: %s", pMalloc[aux3].nome, pMalloc[aux3].instituicao, pMalloc[aux3].uf, pMalloc[aux3].fase, pMalloc[aux3].chamada, pMalloc[aux3].vagas, pMalloc[aux3].valor, pMalloc[aux3].data, pMalloc[aux3].descricao);
+        printf("NOME: %s INSTITUICAO: %s UF: %s FASE: %s CHAMADA: %s VAGAS: %d VALOR: %.2f DATA: %s DESCRICAO: %s", pMalloc[aux3].nome, pMalloc[aux3].instituicao, pMalloc[aux3].uf, pMalloc[aux3].fase, pMalloc[aux3].chamada, pMalloc[aux3].vagas, pMalloc[aux3].valor, pMalloc[aux3].data, pMalloc[aux3].descricao);
         flag++;
         }
         aux3++;
@@ -611,7 +620,7 @@ void ufSearchExam(char *uf){
 
 }
 
-void institutionSearchExam(char *sigla){
+void procurarInstitucaoVest(char *sigla){
 
     vestibular eventos;
     FILE *arqListagem;
@@ -672,7 +681,7 @@ void institutionSearchExam(char *sigla){
     {
 
         if(strcmp(sigla,pMalloc[aux3].instituicao) == 0){
-        printf("Nome: %s Instituicao: %s UF: %s Fase: %s Chamada: %s Vagas: %d Valor: %.2f Data: %s Descricao: %s", pMalloc[aux3].nome, pMalloc[aux3].instituicao, pMalloc[aux3].uf, pMalloc[aux3].fase, pMalloc[aux3].chamada, pMalloc[aux3].vagas, pMalloc[aux3].valor, pMalloc[aux3].data, pMalloc[aux3].descricao);
+        printf("NOME: %s INSTITUICAO: %s UF: %s FASE: %s CHAMADA: %s VAGAS: %d VALOR: %.2f DATA: %s DESCRICAO: %s", pMalloc[aux3].nome, pMalloc[aux3].instituicao, pMalloc[aux3].uf, pMalloc[aux3].fase, pMalloc[aux3].chamada, pMalloc[aux3].vagas, pMalloc[aux3].valor, pMalloc[aux3].data, pMalloc[aux3].descricao);
         flag++;
         }
         aux3++;
@@ -702,7 +711,7 @@ void institutionSearchExam(char *sigla){
 
 }
 
-void nameSearchExam(char *name){
+void procurarNomeVest(char *name){
 
     vestibular eventos;
     FILE *arqListagem;
@@ -763,7 +772,7 @@ void nameSearchExam(char *name){
     {
 
         if(strcmp(name,pMalloc[aux3].nome) == 0){
-        printf("Nome: %s Instituicao: %s UF: %s Fase: %s Chamada: %s Vagas: %d Valor: %.2f Data: %s Descricao: %s", pMalloc[aux3].nome, pMalloc[aux3].instituicao, pMalloc[aux3].uf, pMalloc[aux3].fase, pMalloc[aux3].chamada, pMalloc[aux3].vagas, pMalloc[aux3].valor, pMalloc[aux3].data, pMalloc[aux3].descricao);
+        printf("NOME: %s INSTITUICAO: %s UF: %s FASE: %s CHAMADA: %s VAGAS: %d VALOR: %.2f DATA: %s DESCRICAO: %s", pMalloc[aux3].nome, pMalloc[aux3].instituicao, pMalloc[aux3].uf, pMalloc[aux3].fase, pMalloc[aux3].chamada, pMalloc[aux3].vagas, pMalloc[aux3].valor, pMalloc[aux3].data, pMalloc[aux3].descricao);
         flag++;
         }
         aux3++;
@@ -792,6 +801,148 @@ void nameSearchExam(char *name){
     fclose(arqListagem);
 
 }
+
+
+
+
+void validaNomeVest(char *vestNome)
+{
+    FILE *arqVest;
+    vestibular evento;
+
+    if ((arqVest = fopen("Vestibulares.txt","rt")) == NULL)
+    {
+        printf("Erro ao abrir o arquivo");
+        return;
+    }
+
+    while (!feof(arqVest))
+    {
+        if ((fread(&evento,sizeof(vestibular),1,arqVest)) == 1)
+        {
+            if (strcmp(vestNome,evento.nome) == 0)
+            {
+                printf("Um vestibular com este nome já foi cadastrado. Por favor entre com outro nome: \n");
+                fgets(vestNome,MAX,stdin);
+                validaNome(vestNome);
+                rewind(arqVest);
+            }
+        }
+    }
+
+    fclose(arqVest);
+
+}
+
+void apagaVest(){
+
+    FILE *arqVest;
+    FILE *arqVestNovo;
+    vestibular evento;
+    char vest[MAX];
+    int opt = -1;
+
+    arqVest  =  fopen("Vestibulares.txt", "r+");
+
+    if(!arqVest){
+       printf("\nO arquivo com os vestibulares nao pode ser encontrado!\n");
+    }
+
+
+     //Verifica se o arquivo está vazio
+    fseek (arqVest, 0, SEEK_END);
+    if (ftell (arqVest) == 0)
+    {
+        system("clear");
+        printf("Nenhum vestibular cadastrado!\n\n");
+        return;
+    }
+
+    printf("\nEntre com o nome do vestibular a ser deletado: \n");
+    fgets(vest,MAX,stdin);
+    system("clear");
+    printf("\nEste é o vestibular que voce deseja excluir?\n");
+    buscarVest(vest);
+    printf("\n1 - Sim\n");
+    printf("\n0 - Nao\n");
+    scanf("%d", &opt);
+    validaConfirma(&opt);
+
+    switch(opt){
+        case 1:{
+            system("clear");
+
+            arqVestNovo = fopen("temp.txt","wt");
+            if(!arqVestNovo){
+                printf("\nNovo arquivo vestibular não pode ser criado!\n");
+            }
+
+            rewind(arqVest);
+
+            while(!feof(arqVest))
+            {
+                if(fread(&evento,sizeof(vestibular),1,arqVest) == 1)
+                {
+                    if(strcmp(evento.nome,vest)!=0)
+                    {
+                        if(fwrite(&evento,sizeof(vestibular),1,arqVestNovo) == 1)
+                        {
+                        }
+                    }
+                }
+            }
+
+            fclose(arqVest);
+            fclose(arqVestNovo);
+
+            remove("Vestibulares.txt");
+            rename("temp.txt","Vestibulares.txt");
+            system("clear");
+            printf("\nO vestibular foi excluido com sucesso!\n");
+            return;
+            break;
+        }
+        case 0:{
+            system("clear");
+            printf("\nO intem não foi excluido!\n");
+            break;
+        }
+    }
+
+    fclose(arqVest);
+}
+
+void buscarVest(char *vestNome)
+{
+    FILE *arqVest;
+    int contador = 0;
+    guardaPosicao = 0;
+    vestibular evento;
+
+    validaNome(vestNome);
+    arqVest = fopen("Vestibulares.txt","rt");
+
+    if (!arqVest){
+        printf("Arquivo vestibulares não escontrado!\n");
+        return;
+    }
+
+    while (!feof(arqVest)){
+        contador++;
+        if ((fread(&evento,sizeof(vestibular),1,arqVest)) == 1)
+        {
+            if (strcmp(vestNome,evento.nome) == 0)
+            {
+
+                printf("NOME: %s INSTITUICAO: %s UF: %s FASE: %s CHAMADA: %s VAGAS: %d VALOR: %.2fR$ DATA: %s DESCRICAO: %s", evento.nome, evento.instituicao, evento.uf, evento.fase, evento.chamada, evento.vagas, evento.valor, evento.data, evento.descricao);
+
+                guardaPosicao = contador;
+            }
+        }
+    }
+    fclose(arqVest);
+}
+
 
 
 // Parte Lucas Penido e Lucas Siqueira
