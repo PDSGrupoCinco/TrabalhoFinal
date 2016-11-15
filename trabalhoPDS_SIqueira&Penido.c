@@ -15,7 +15,7 @@ typedef struct
 
 } faculdades;
 
-int guardaPosicao = 0;
+int guardaPosicao = 0; //Variavel global, pois usamos em 2 subprogramas diferentes.
 
 //Prototipos
 void validaOpcao(int *pOpcao);
@@ -27,17 +27,23 @@ void validaNome(char *pNome);
 void validaConfirma(int *pComfima);
 void buscaChave(char *pNome);
 void mudaLetra (char *palavra);
+void validaOpcao2(int *pOpcao);
+void buscaUf(char *pNome);
+void busca();
+void buscaTipo(char *pNome);
+void validaMenuBusca(int *pOpcao);
+void validaTipo(char *pTipo);
 
 int main(void)
 {
 // Declaracoes
     int opcao;
 // Instrucoes
-    while (opcao != 5)
+    while (opcao != 6)
     {
         printf("\t\tFACULDADES\n\n");
-        printf("1. Cadastrar \n2. Editar \n3. Listar \n4. Deletar \n5. Sair\n");
-        printf("Escolha a opcao que deseja: ");
+        printf("1. Cadastrar \n2. Alterar \n3. Listar\n4. Buscar\n5. Deletar \n6. Sair\n");
+        printf("\nEscolha a opcao que deseja: ");
         scanf("%d",&opcao);
         __fpurge(stdin);
         validaOpcao(&opcao);
@@ -52,16 +58,80 @@ int main(void)
         case 3:
             lista();
             break;
-
-        case 4:
+	case 4:
+	    busca();
+	    break;
+        case 5:
             deleta();
+	    break;
         }
-
     }
     return 0;
 }
 
+void busca(){
+	    int escolha;
+	    char busca[MAX];
+
+	    LIMPA_TELA;
+	    printf("Busca por:\n 1-Nome \n 2-UF \n 3-Tipo \n 4-Sair\n");
+	    printf("Escolha a opcao que deseja: ");
+	    scanf("%d",&escolha);
+	    validaMenuBusca(&escolha);
+	    __fpurge(stdin);
+	    switch(escolha){
+	    	case 1:
+			printf("informe o nome: \n");
+			fgets(busca,MAX,stdin);
+	           	__fpurge(stdin);
+	    		validaNome(busca);
+	    		buscaChave(busca);
+			return;
+			break;
+		case 2:
+			printf("informe a UF: \n");
+			fgets(busca,MAX,stdin);
+	           	__fpurge(stdin);
+	    		validaNome(busca);
+			buscaUf(busca);
+			return;
+			break;
+		case 3:
+			printf("informe o tipo: \n");
+			fgets(busca,MAX,stdin);
+	           	__fpurge(stdin);
+	    		validaNome(busca);
+			buscaTipo(busca);
+			return;
+	    }
+}
+
+void validaMenuBusca(int *pOpcao)
+{
+
+    while(*pOpcao < 1 || *pOpcao > 4)
+    {
+        printf("Opcao invalida digite novamente \n");
+        scanf("%d",pOpcao);
+        __fpurge(stdin);
+
+    }
+}
+
+
 void validaOpcao(int *pOpcao)
+{
+
+    while(*pOpcao < 1 || *pOpcao > 6)
+    {
+        printf("Opcao invalida digite novamente \n");
+        scanf("%d",pOpcao);
+        __fpurge(stdin);
+
+    }
+}
+
+void validaOpcao2(int *pOpcao)
 {
 
     while(*pOpcao < 1 || *pOpcao > 5)
@@ -72,6 +142,7 @@ void validaOpcao(int *pOpcao)
 
     }
 }
+
 
 void validaNome(char *pNome)
 {
@@ -178,9 +249,7 @@ void cadastro()
     fgets(cadastrar.tipo,MAX,stdin);
     __fpurge(stdin);
 
-
-
-    validaNome(cadastrar.tipo);
+    validaTipo(cadastrar.tipo);
 
     __fpurge(stdin);
 
@@ -393,7 +462,7 @@ void editaDados()
         scanf("%d",&opcao2);
         __fpurge(stdin);
 
-        validaOpcao(&opcao2);
+        validaOpcao2(&opcao2);
 
         switch(opcao2)
         {
@@ -424,7 +493,7 @@ void editaDados()
                 printf("Erro\n");
             }
             fclose(pArquivos);
-
+	    return;
             break;
         case 2:
             printf("Informe a nova UF \n");
@@ -451,6 +520,7 @@ void editaDados()
                 printf("Erro\n");
             }
             fclose(pArquivos);
+	    return;
             break;
 
         case 3:
@@ -478,6 +548,7 @@ void editaDados()
                 printf("Erro\n");
             }
             fclose(pArquivos);
+	    return;
             break;
         case 4:
             printf("Deseja mesmo deletar a faculdade(digite 1 para sim ou 0 para nao)\n");
@@ -527,6 +598,7 @@ void editaDados()
     return;
 }
 
+
 void buscaChave(char *pNome)
 {
     FILE *pArquivo;
@@ -550,12 +622,89 @@ void buscaChave(char *pNome)
             {
                 printf("Nome: %s \n",cadastro.nome);
                 printf("UF: %s \n",cadastro.uf);
-                printf("Tipo: %s \n",cadastro.tipo);
+                printf("Tipo: %s \n\n",cadastro.tipo);
                 guardaPosicao = contador;
             }
         }
     }
     fclose(pArquivo);
+}
+
+void buscaUf(char *pNome)
+{
+    FILE *pArquivo;
+    faculdades cadastro;
+    int contador = 0;
+    guardaPosicao = 0;
+
+
+    if ((pArquivo = fopen("faculdades.txt","rt")) == NULL)
+    {
+        printf("Erro ao abrir o arquivo");
+        return;
+    }
+
+    while (!feof(pArquivo))
+    {
+        contador++;
+        if ((fread(&cadastro,sizeof(faculdades),1,pArquivo)) == 1)
+        {
+            if (strcmp(pNome,cadastro.uf) == 0)
+            {
+                printf("Nome: %s \n",cadastro.nome);
+                printf("UF: %s \n",cadastro.uf);
+                printf("Tipo: %s \n\n",cadastro.tipo);
+                guardaPosicao = contador;
+            }
+        }
+    }
+    fclose(pArquivo);
+}
+
+void buscaTipo(char *pNome)
+{
+    FILE *pArquivo;
+    faculdades cadastro;
+    int contador = 0;
+    guardaPosicao = 0;
+
+
+    if ((pArquivo = fopen("faculdades.txt","rt")) == NULL)
+    {
+        printf("Erro ao abrir o arquivo");
+        return;
+    }
+
+    while (!feof(pArquivo))
+    {
+        contador++;
+        if ((fread(&cadastro,sizeof(faculdades),1,pArquivo)) == 1)
+        {
+            if (strcmp(pNome,cadastro.tipo) == 0)
+            {
+                printf("Nome: %s \n",cadastro.nome);
+                printf("UF: %s \n",cadastro.uf);
+                printf("Tipo: %s \n\n",cadastro.tipo);
+                guardaPosicao = contador;
+            }
+        }
+    }
+    fclose(pArquivo);
+}
+
+void validaTipo(char *pTipo)
+{
+	validaNome(pTipo);
+
+	while((strcmp(pTipo,"PARTICULAR\0") != 0) && (strcmp(pTipo,"PUBLICA\0") != 0))
+	{
+		printf("Tipo invalido, digite particular ou publica\n");
+		fgets(pTipo,MAX,stdin);
+		__fpurge(stdin);
+		validaNome(pTipo);
+	}
+	
+
 }
 
 void mudaLetra(char *palavra)
