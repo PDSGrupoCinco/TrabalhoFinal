@@ -17,6 +17,10 @@ void examMenu();
 void exams();
 void registerExam();
 void listExams();
+void searchExam();
+void ufSearchExam(char *uf);
+void institutionSearchExam(char *sigla);
+void nameSearchExam(char *nome);
 
 // Protótipos Faculdades/Universidades
 
@@ -225,7 +229,7 @@ void examMenu(){
 
 void exams(){
     int opcao = -1;
-
+    system("clear");
     while(opcao != 0){
         printf("\t\t *** Vestibulares  ***\n");
         printf("1 - Cadastrar\n");
@@ -251,7 +255,7 @@ void exams(){
 
             case 3:
                 system("clear");
-                printf("Buscar\n");
+                searchExam();
                 break;
 
             case 4:
@@ -402,7 +406,7 @@ void listExams(){
 
     if (contador == 0)
     {
-        //LIMPA_TELA;
+        system("clear");
         printf("Nenhum Vestibular Encontrado\n\n");
         return;
     }
@@ -456,99 +460,338 @@ void listExams(){
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void searchExam(){
+
+    int opt = -1;
+    char palavra[MAX];
+
+
+    while(opt != 0){
+
+        system("clear");
+        printf("\t\t\tBusque um Vestibular\n\n");
+        printf("1 - Nome\n");
+        printf("2 - Sigla da Instituicao\n");
+        printf("3 - Unidade Federativa\n");
+        printf("0 - Voltar\n");
+        printf("\nEscolha um filtro: ");
+
+        scanf("%d", &opt);
+        __fpurge(stdin);
+
+        switch(opt){
+            case 1:
+                system("clear");
+                printf("\t\t\tBusca pelo nome:\n\n");
+                printf("Digite o nome do evento: ");
+                fgets(palavra,MAX,stdin);
+                validaNome(palavra);
+                __fpurge(stdin);
+                nameSearchExam(palavra);
+                break;
+
+            case 2:
+                system("clear");
+                printf("\t\t\tBusca pela Instituicao:\n\n");
+                printf("Digite a sigla da instituicao responsavel pelo evento: ");
+                fgets(palavra,MAX,stdin);
+                validaNome(palavra);
+                __fpurge(stdin);
+                institutionSearchExam(palavra);
+                break;
+
+            case 3:
+                system("clear");
+                printf("\t\t\tBusca pela Unidade Federativa:\n\n");
+                printf("Digite a sigla da Unidade Federativa onde ocorrerá o evento: ");
+                fgets(palavra,MAX,stdin);
+                __fpurge(stdin);
+                ufSearchExam(palavra);
+                break;
+
+            case 0:
+                break;
+
+            default:
+                printf("\nValor inválido. Tente novamente\n");
+        }
+
+    }
+    system("clear");
+}
+
+void ufSearchExam(char *uf){
+
+    vestibular eventos;
+    FILE *arqListagem;
+    int contador = 0;
+    int aux = 0;
+    int aux2 = 0;
+    int aux3 = 0;
+    int confirma;
+    vestibular *pMalloc;
+
+   validaNome(uf);
+   system("clear");
+    if ((arqListagem = fopen("Vestibulares.txt","a+")) == NULL)
+    {
+        printf("Erro ao abrir o arquivo");
+        return;
+    }
+
+
+
+    while (fread(&eventos,sizeof(vestibular),1,arqListagem) == 1)
+    {
+        contador++;
+    }
+
+    if (contador == 0)
+    {
+        system("clear");
+        printf("Nenhum Vestibular Encontrado\n\n");
+        return;
+    }
+
+    rewind(arqListagem);
+
+    pMalloc = (vestibular *)malloc(contador * sizeof(vestibular));
+
+    while (fread(&pMalloc[aux],sizeof(vestibular),1,arqListagem) == 1)
+    {
+        aux++;
+    }
+
+    for(aux = 0; aux < contador - 1; aux++)
+    {
+        for(aux2 = aux + 1; aux2 < contador; aux2++)
+        {
+            if (strcmp(pMalloc[aux].nome,pMalloc[aux2].nome) > 0)
+            {
+                eventos = pMalloc[aux2];
+                pMalloc[aux2] = pMalloc[aux];
+                pMalloc[aux] = eventos;
+            }
+        }
+    }
+
+    printf("\t\t\t\t\t\tBusca por vestibulares do %s\n\n", uf);
+    int flag = 0;
+    while (aux3 != contador)
+    {
+
+        if(strcmp(uf,pMalloc[aux3].uf) == 0){
+        printf("Nome: %s Instituicao: %s UF: %s Fase: %s Chamada: %s Vagas: %d Valor: %.2f Data: %s Descricao: %s", pMalloc[aux3].nome, pMalloc[aux3].instituicao, pMalloc[aux3].uf, pMalloc[aux3].fase, pMalloc[aux3].chamada, pMalloc[aux3].vagas, pMalloc[aux3].valor, pMalloc[aux3].data, pMalloc[aux3].descricao);
+        flag++;
+        }
+        aux3++;
+    }
+
+    if(flag == 0){
+        printf("Nenhum vestibular desta unidade federativa foi encontrado!");
+    }
+
+    printf("\n");
+
+    printf("0 - Voltar\n");
+    scanf("%d",&confirma);
+
+    __fpurge(stdin);
+
+    while(confirma != 0)
+    {
+        printf("Opcao invalida digite novamente \n");
+        scanf("%d",&confirma);
+        __fpurge(stdin);
+    }
+
+    system("clear");
+
+    fclose(arqListagem);
+
+}
+
+void institutionSearchExam(char *sigla){
+
+    vestibular eventos;
+    FILE *arqListagem;
+    int contador = 0;
+    int aux = 0;
+    int aux2 = 0;
+    int aux3 = 0;
+    int confirma;
+    vestibular *pMalloc;
+
+   validaNome(sigla);
+   system("clear");
+    if ((arqListagem = fopen("Vestibulares.txt","a+")) == NULL)
+    {
+        printf("Erro ao abrir o arquivo");
+        return;
+    }
+
+
+
+    while (fread(&eventos,sizeof(vestibular),1,arqListagem) == 1)
+    {
+        contador++;
+    }
+
+    if (contador == 0)
+    {
+        system("clear");
+        printf("Nenhum Vestibular Encontrado\n\n");
+        return;
+    }
+
+    rewind(arqListagem);
+
+    pMalloc = (vestibular *)malloc(contador * sizeof(vestibular));
+
+    while (fread(&pMalloc[aux],sizeof(vestibular),1,arqListagem) == 1)
+    {
+        aux++;
+    }
+
+    for(aux = 0; aux < contador - 1; aux++)
+    {
+        for(aux2 = aux + 1; aux2 < contador; aux2++)
+        {
+            if (strcmp(pMalloc[aux].nome,pMalloc[aux2].nome) > 0)
+            {
+                eventos = pMalloc[aux2];
+                pMalloc[aux2] = pMalloc[aux];
+                pMalloc[aux] = eventos;
+            }
+        }
+    }
+
+    printf("\t\t\t\t\t\tBusca por vestibulares da instituicao %s\n\n", sigla);
+    int flag = 0;
+    while (aux3 != contador)
+    {
+
+        if(strcmp(sigla,pMalloc[aux3].instituicao) == 0){
+        printf("Nome: %s Instituicao: %s UF: %s Fase: %s Chamada: %s Vagas: %d Valor: %.2f Data: %s Descricao: %s", pMalloc[aux3].nome, pMalloc[aux3].instituicao, pMalloc[aux3].uf, pMalloc[aux3].fase, pMalloc[aux3].chamada, pMalloc[aux3].vagas, pMalloc[aux3].valor, pMalloc[aux3].data, pMalloc[aux3].descricao);
+        flag++;
+        }
+        aux3++;
+    }
+
+    if(flag == 0){
+        printf("Nenhum vestibular desta instituicao foi encontrado!");
+    }
+
+    printf("\n");
+
+    printf("0 - Voltar\n");
+    scanf("%d",&confirma);
+
+    __fpurge(stdin);
+
+    while(confirma != 0)
+    {
+        printf("Opcao invalida digite novamente \n");
+        scanf("%d",&confirma);
+        __fpurge(stdin);
+    }
+
+    system("clear");
+
+    fclose(arqListagem);
+
+}
+
+void nameSearchExam(char *name){
+
+    vestibular eventos;
+    FILE *arqListagem;
+    int contador = 0;
+    int aux = 0;
+    int aux2 = 0;
+    int aux3 = 0;
+    int confirma;
+    vestibular *pMalloc;
+
+   validaNome(name);
+   system("clear");
+    if ((arqListagem = fopen("Vestibulares.txt","a+")) == NULL)
+    {
+        printf("Erro ao abrir o arquivo");
+        return;
+    }
+
+
+
+    while (fread(&eventos,sizeof(vestibular),1,arqListagem) == 1)
+    {
+        contador++;
+    }
+
+    if (contador == 0)
+    {
+        system("clear");
+        printf("Nenhum Vestibular Encontrado\n\n");
+        return;
+    }
+
+    rewind(arqListagem);
+
+    pMalloc = (vestibular *)malloc(contador * sizeof(vestibular));
+
+    while (fread(&pMalloc[aux],sizeof(vestibular),1,arqListagem) == 1)
+    {
+        aux++;
+    }
+
+    for(aux = 0; aux < contador - 1; aux++)
+    {
+        for(aux2 = aux + 1; aux2 < contador; aux2++)
+        {
+            if (strcmp(pMalloc[aux].nome,pMalloc[aux2].nome) > 0)
+            {
+                eventos = pMalloc[aux2];
+                pMalloc[aux2] = pMalloc[aux];
+                pMalloc[aux] = eventos;
+            }
+        }
+    }
+
+    printf("\t\t\t\t\t\tBusca por vestibulares com o nome: %s\n\n", name);
+    int flag = 0;
+    while (aux3 != contador)
+    {
+
+        if(strcmp(name,pMalloc[aux3].nome) == 0){
+        printf("Nome: %s Instituicao: %s UF: %s Fase: %s Chamada: %s Vagas: %d Valor: %.2f Data: %s Descricao: %s", pMalloc[aux3].nome, pMalloc[aux3].instituicao, pMalloc[aux3].uf, pMalloc[aux3].fase, pMalloc[aux3].chamada, pMalloc[aux3].vagas, pMalloc[aux3].valor, pMalloc[aux3].data, pMalloc[aux3].descricao);
+        flag++;
+        }
+        aux3++;
+    }
+
+    if(flag == 0){
+        printf("Nenhum vestibular com este nome foi encontrado!\n");
+    }
+
+    printf("\n");
+
+    printf("0 - Voltar\n");
+    scanf("%d",&confirma);
+
+    __fpurge(stdin);
+
+    while(confirma != 0)
+    {
+        printf("Opcao invalida digite novamente \n");
+        scanf("%d",&confirma);
+        __fpurge(stdin);
+    }
+
+    system("clear");
+
+    fclose(arqListagem);
+
+}
 
 
 // Parte Lucas Penido e Lucas Siqueira
