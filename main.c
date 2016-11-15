@@ -19,6 +19,7 @@ void cadastrarVest();
 void listarVest();
 void procurarVest();
 void apagaVest();
+void atualizaVest();
 void procurarUFVest(char *uf);
 void procurarInstitucaoVest(char *sigla);
 void procurarNomeVest(char *nome);
@@ -36,9 +37,9 @@ void validaNome(char *pNome);
 void validaConfirma(int *pComfima);
 void buscaChave(char *pNome);
 void mudaLetra (char *palavra);
-int university();
+int uniFacul();
 
-// Variáveis globais Faculdades/Universidades
+// Variáveis globais
 
 int guardaPosicao = 0;
 
@@ -201,7 +202,7 @@ void vestibularMenu(){
             case 1:
                 system("clear");
                 //AQUI ENTRA A FUNÇÃO RESPONSÁVEL PELA PARTE FACULDADES / UNIVERSIDADES - LUCAS PENIDO E LUCAS SIQUEIRA
-                university();
+                uniFacul();
                 break;
 
             case 2:
@@ -227,6 +228,8 @@ void vestibularMenu(){
 }
 
 
+
+/**********************************************************************************************************************************/
 // Parte Lucas S. Souza e Lude Ribeiro
 // Vestibulares - Vestibulares
 
@@ -263,7 +266,7 @@ void vestibulares(){
 
             case 4:
                 system("clear");
-                printf("Atualizar\n");
+                atualizaVest();
                 break;
 
             case 5:
@@ -312,14 +315,10 @@ void cadastrarVest(){
     validaNome(evento.nome);
     validaNomeVest(evento.nome);
 
-
-
     printf("\nSigla da Instituicao: ");
     fgets(evento.instituicao,MAX,stdin);
     __fpurge(stdin);
     validaNome(evento.instituicao);
-
-
 
     printf("\nUnidade Federativa: ");
     fgets(evento.uf,MAX,stdin);
@@ -477,7 +476,6 @@ void procurarVest(){
 
     while(opt != 0){
 
-        system("clear");
         printf("\t\t\tBusque um Vestibular\n\n");
         printf("1 - Nome\n");
         printf("2 - Sigla da Instituicao\n");
@@ -522,6 +520,7 @@ void procurarVest(){
                 break;
 
             default:
+                system("clear");
                 printf("\nValor inválido. Tente novamente\n");
         }
 
@@ -861,8 +860,14 @@ void apagaVest(){
     printf("\nEntre com o nome do vestibular a ser deletado: \n");
     fgets(vest,MAX,stdin);
     system("clear");
-    printf("\nEste é o vestibular que voce deseja excluir?\n");
     buscarVest(vest);
+    if(guardaPosicao == 0)
+    {
+        system("clear");
+        printf("Vestibular nao encontrado no sistema! \n");
+        return;
+    }
+    printf("\nEste é o vestibular que voce deseja excluir?\n");
     printf("\n1 - Sim\n");
     printf("\n0 - Nao\n");
     scanf("%d", &opt);
@@ -943,12 +948,142 @@ void buscarVest(char *vestNome)
     fclose(arqVest);
 }
 
+void atualizaVest(){
+
+    FILE *arqVest;
+    FILE *arqVestNovo;
+    vestibular evento;
+    int opcao = 0;
+    char vest[MAX];
+    int opt = -1;
+
+    arqVest  =  fopen("Vestibulares.txt", "r+");
+
+    if(!arqVest){
+       printf("\nO arquivo com os vestibulares nao pode ser encontrado!\n");
+    }
 
 
+     //Verifica se o arquivo está vazio
+    fseek (arqVest, 0, SEEK_END);
+    if (ftell (arqVest) == 0)
+    {
+        system("clear");
+        printf("Nenhum vestibular cadastrado!\n\n");
+        return;
+    }
+
+    printf("\nEntre com o nome do vestibular a ser modificado: \n");
+    fgets(vest,MAX,stdin);
+    system("clear");
+    buscarVest(vest);
+    if(guardaPosicao == 0)
+    {
+        system("clear");
+        printf("Vestibular nao encontrado no sistema! \n\n");
+        return;
+    }
+    printf("\nEste é o vestibular que voce deseja modificar?\n");
+    printf("\n1 - Sim\n");
+    printf("\n0 - Nao\n");
+    scanf("%d", &opt);
+    validaConfirma(&opt);
+
+    switch(opt){
+        case 1:{
+            system("clear");
+            __fpurge(stdin);
+            fseek(arqVest,((guardaPosicao - 1) * sizeof(vestibular)), SEEK_SET);
+            fread(&evento,sizeof(vestibular),1,arqVest);
+
+            printf("Atualize o Vestibular:\n");
+            printf("Nome: ");
+            fgets(evento.nome,MAX,stdin);
+            __fpurge(stdin);
+            validaNomeVest(evento.nome);
+            validaNome(evento.nome);
+
+            printf("\nSigla da Instituicao: ");
+            fgets(evento.instituicao,MAX,stdin);
+            __fpurge(stdin);
+            validaNome(evento.instituicao);
+
+            printf("\nUnidade Federativa: ");
+            fgets(evento.uf,MAX,stdin);
+            __fpurge(stdin);
+            validaNome(evento.uf);
+
+            printf("\nFase: ");
+            fgets(evento.fase,MAX,stdin);
+            __fpurge(stdin);
+            validaNome(evento.fase);
+
+            printf("\nChamada: ");
+            fgets(evento.chamada,MAX,stdin);
+            __fpurge(stdin);
+            validaNome(evento.chamada);
+
+            printf("\nValor da Inscricao: ");
+            scanf("%f", &evento.valor);
+            __fpurge(stdin);
+
+            printf("\nQuantidade de vagas: ");
+            scanf("%d", &evento.vagas);
+            __fpurge(stdin);
+
+            printf("\nData da prova: ");
+            fgets(evento.data,MAX,stdin);
+            validaNome(evento.data);
+            __fpurge(stdin);
+
+            printf("\nDescricao: ");
+            fgets(evento.descricao,MAX,stdin);
+            __fpurge(stdin);
+
+            printf("\nDeseja salvar?\n");
+            printf("1 - Sim\n");
+            printf("0 - Nao\n");
+            scanf("%d", &opcao);
+            __fpurge(stdin);
+
+            validaConfirma(&opcao);
+            if(opcao == 0){
+                system("clear");
+                printf("\nO intem não foi modificado!\n");
+                return;
+            }
+            fseek(arqVest,((guardaPosicao - 1) * sizeof(vestibular)), SEEK_SET);
+
+            if (fwrite(&evento,sizeof(vestibular),1,arqVest) == 1)
+            {
+                system("clear");
+                printf("\nAlteracao realizada com sucesso\n\n");
+            }
+            else
+            {
+                printf("Erro na atualizacao do vestibular\n");
+            }
+            fclose(arqVest);
+            return;
+            break;
+        }
+        case 0:{
+            system("clear");
+            printf("\nO intem não foi modificado!\n");
+            break;
+        }
+    }
+
+    fclose(arqVest);
+
+}
+
+
+/**********************************************************************************************************************************/
 // Parte Lucas Penido e Lucas Siqueira
 // Vestibulares - Faculdades/Universidades
 
-int university(void)
+int uniFacul(void)
 {
 // Declaracoes
     int opcao;
