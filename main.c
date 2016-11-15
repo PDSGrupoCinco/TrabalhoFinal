@@ -16,6 +16,7 @@ void examMenu();
 
 void exams();
 void registerExam();
+void listExam();
 
 // Protótipos Faculdades/Universidades
 
@@ -55,6 +56,9 @@ typedef struct
     char fase[MAX];
     char descricao[300];
     char chamada[MAX];
+    char data[MAX];
+    float valor;
+    int vagas;
 
 }vestibular;
 
@@ -322,15 +326,22 @@ void registerExam(){
     __fpurge(stdin);
     validaNome(evento.fase);
 
-
-
     printf("\nChamada: ");
     fgets(evento.chamada,MAX,stdin);
     __fpurge(stdin);
     validaNome(evento.chamada);
 
+    printf("\nValor da Inscricao: ");
+    scanf("%f", &evento.valor);
+    __fpurge(stdin);
 
+    printf("\nQuantidade de vagas: ");
+    scanf("%d", &evento.vagas);
+    __fpurge(stdin);
 
+    printf("\nData da prova: ");
+    fgets(evento.data,MAX,stdin);
+    __fpurge(stdin);
 
     printf("\nDescricao: ");
     fgets(evento.descricao,MAX,stdin);
@@ -359,6 +370,106 @@ void registerExam(){
     }
 
 }
+
+
+
+//Listar Vestibular
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // Parte Lucas Penido e Lucas Siqueira
