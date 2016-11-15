@@ -571,12 +571,10 @@ void editaDados()
             return;
             break;
         case 4:
-            printf("Deseja mesmo deletar a faculdade(digite 1 para sim ou 0 para nao)\n");
+            printf("Deseja mesmo deletar a faculdade?\n1 - SIM\n0 - NAO\n");
             scanf("%d",&confirmacao);
             fflush(stdin);
-
             validaConfirma(&confirmacao);
-            printf("X%dX",confirmacao);
             switch(confirmacao)
             {
             case 0:
