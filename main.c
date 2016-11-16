@@ -4,6 +4,7 @@
 #include <stdio_ext.h>
 #include <ctype.h>
 #define MAX 100
+#define MIN 100
 #define LIMPA_TELA system("clear"); system("clear");
 
 // Protótipos MENU
@@ -64,6 +65,24 @@ void buscaPlataformaApp(char *pNome);
 void mudaLetraApp (char *palavra);
 int appIntercambio();
 
+// Protótipos Viagens
+
+void validaOpcaoViagem(int *pOpcao);
+void cadastroViagem();
+void editaDadosViagem();
+void listaViagem();
+void deletaViagem();
+void validaNomeViagem(char *pNome);
+void validaConfirmaViagem(int *pComfima);
+void buscaChaveViagem(char *pNome);
+void mudaLetraViagem(char *palavra);
+void validaOpcao2Viagem(int *pOpcao);
+void buscaContViagem(char *pNome);
+void buscaViagem();
+void buscaLingViagem(char *pNome);
+void validaMenuBuscaViagem(int *pOpcao);
+void validaLingViagem(char *pTipo);
+int estiloViagens();
 
 // Variáveis globais
 
@@ -108,7 +127,25 @@ typedef struct
 
 } aplicativos;
 
+// Struct Viagens
 
+typedef struct
+{
+    char pais[MAX];
+    char continente[MAX];
+    char lingua[MAX];
+    char descricao[MAX];
+    char curiosidades[MAX];
+    char dicas[MAX];
+    char sites[MAX];
+
+}destinos;
+
+
+
+
+
+// *** MAIN ***
 
 int main(){
 
@@ -116,6 +153,8 @@ int main(){
     return 0;
 
 }
+
+
 
 
 //MENU PRINCIPAL DA APLICAÇÃO
@@ -188,13 +227,13 @@ void estiloMenu(){
             case 1:
                 system("clear");
                 //AQUI ENTRA A FUNÇÃO RESPONSÁVEL PELOS SIGNOS - LUCAS KISHIMA
-                printf("Signos\n");
+                printf("\nTrecho ainda nao implementado!\n");
                 break;
 
             case 2:
                 //AQUI ENTRA A FUNÇÃO RESPONSÁVEL PELAS VIAGENS - LUCIANA E LUCIANO
                 system("clear");
-                printf("Viagens\n");
+                estiloViagens();
                 break;
 
             case 0:
@@ -2564,4 +2603,800 @@ void mudaLetraApp(char *palavra)
     {
         palavra[i] = toupper(palavra[i]);
     }
+}
+
+/**********************************************************************************************************************************/
+//Parte Viagens
+//VIAGENS - LUCIANA E LUCIANO
+
+
+int estiloViagens(void)
+{
+// Declaracoes
+    int opcao = -1;
+// Instrucoes
+    while (opcao != 6){
+      printf("\t\t *** Viagem ***\n\n");
+      printf("1 - Cadastrar \n2 - Alterar \n3 - Listar\n4 - Buscar\n5 - Deletar \n6 - Sair\n");
+      printf("\nEscolha a opcao que deseja: ");
+      scanf("%d",&opcao);
+      __fpurge(stdin);
+      validaOpcaoViagem(&opcao);
+      switch (opcao)
+{
+      case 1:
+          cadastroViagem();
+          break;
+      case 2:
+          editaDadosViagem();
+          break;
+      case 3:
+          listaViagem();
+          break;
+      case 4:
+          buscaViagem();
+          break;
+      case 5:
+        deletaViagem();
+          break;
+    }
+  }
+  return 0;
+}
+/******************************************************************************/
+void buscaChaveViagem(char *pNome){ //ESSA FUNCAO EH ESPECIFICA: NAO APAGAR!!!
+    FILE *pArquivo;
+    destinos cadastro;
+    int contador = 0;
+    guardaPosicao = 0;
+
+
+    if ((pArquivo = fopen("viagem.txt","rt")) == NULL){
+        printf("Erro ao abrir o arquivo");
+        return;
+    }
+    while (!feof(pArquivo)){
+        contador++;
+        if ((fread(&cadastro,sizeof(destinos),1,pArquivo)) == 1){
+            if (strcmp(pNome,cadastro.pais) == 0){
+                printf("Pais: %s \n",cadastro.pais);
+                printf("Continente: %s \n",cadastro.continente);
+                printf("Lingua Falada: %s \n",cadastro.lingua);
+                printf("Descricao: %s \n",cadastro.descricao);
+                printf("Curiosidades: %s \n",cadastro.curiosidades);
+                printf("Dicas: %s \n",cadastro.dicas);
+                printf("Sites Recomendados: %s \n\n",cadastro.sites);
+                guardaPosicao = contador;
+            }
+        }
+
+    }
+    fclose(pArquivo);
+  }
+/******************************************************************************/
+void buscaContViagem(char *pNome){ //ESSA FUNCAO EH ESPECIFICA: NAO APAGAR!!!
+
+      FILE *pArquivo;
+      destinos cadastro;
+      int contador = 0;
+      guardaPosicao = 0;
+
+
+      if ((pArquivo = fopen("viagem.txt","rt")) == NULL){
+          printf("Erro ao abrir o arquivo");
+          return;
+      }
+      while (!feof(pArquivo)){
+          contador++;
+          if ((fread(&cadastro,sizeof(destinos),1,pArquivo)) == 1){
+              if (strcmp(pNome,cadastro.continente) == 0){
+                printf("Pais: %s \n",cadastro.pais);
+                printf("Continente: %s \n",cadastro.continente);
+                printf("Lingua Falada: %s \n",cadastro.lingua);
+                printf("Descricao: %s \n",cadastro.descricao);
+                printf("Curiosidades: %s \n",cadastro.curiosidades);
+                printf("Dicas: %s \n",cadastro.dicas);
+                printf("Sites Recomendados: %s \n\n",cadastro.sites);
+                  guardaPosicao = contador;
+              }
+          }
+
+
+    }
+      fclose(pArquivo);
+  }
+
+  void buscaLingViagem(char *pNome){
+      FILE *pArquivo;
+      destinos cadastro;
+      int contador = 0;
+      guardaPosicao = 0;
+
+
+      if ((pArquivo = fopen("viagem.txt","rt")) == NULL){
+          printf("Erro ao abrir o arquivo");
+          return;
+      }
+
+      while (!feof(pArquivo)){
+          contador++;
+          if ((fread(&cadastro,sizeof(destinos),1,pArquivo)) == 1){
+              if (strcmp(pNome,cadastro.lingua) == 0){
+                printf("Pais: %s \n",cadastro.pais);
+                printf("Continente: %s \n",cadastro.continente);
+                printf("Lingua Falada: %s \n",cadastro.lingua);
+                printf("Descricao: %s \n",cadastro.descricao);
+                printf("Curiosidades: %s \n",cadastro.curiosidades);
+                printf("Dicas: %s \n",cadastro.dicas);
+                printf("Sites Recomendados: %s \n\n",cadastro.sites);
+                  guardaPosicao = contador;
+              }
+          }
+
+      }
+      fclose(pArquivo);
+  }
+
+void buscaViagem(){
+    int escolha;
+    int confirma;
+    char busca[MIN];
+
+    LIMPA_TELA;
+    printf("\t\tBUSCAR\n\n");
+    printf("Busca por:\n 1 - Pais \n 2 - Continente \n 3 - Lingua Falada \n 4 - Sair\n");
+    printf("Escolha a opcao que deseja: ");
+    scanf("%d",&escolha);
+    validaMenuBuscaViagem(&escolha);
+    __fpurge(stdin);
+    switch(escolha){
+    case 1:
+        printf("Informe o Pais: \n");
+        fgets(busca,MIN,stdin);
+        __fpurge(stdin);
+        validaNomeViagem(busca);
+        LIMPA_TELA;
+        buscaChaveViagem(busca);
+        break;
+
+    case 2:
+        printf("informe o Continente: \n");
+        fgets(busca,MIN,stdin);
+        __fpurge(stdin);
+        validaNomeViagem(busca);
+        LIMPA_TELA;
+        buscaContViagem(busca);
+        break;
+
+    case 3:
+        printf("informe a Lingua Falada: \n");
+        fgets(busca,MIN,stdin);
+        __fpurge(stdin);
+        validaNomeViagem(busca);
+        LIMPA_TELA;
+        buscaLingViagem(busca);
+        break;
+
+    case 4:
+        LIMPA_TELA;
+        return;
+    }
+
+    printf("1 - Voltar\n");
+    scanf("%d",&confirma);
+
+    __fpurge(stdin);
+
+    while(confirma != 1){
+        printf("Opcao invalida digite novamente \n");
+        scanf("%d",&confirma);
+        __fpurge(stdin);
+    }
+
+    LIMPA_TELA;
+}
+
+void validaMenuBuscaViagem(int *pOpcao){
+
+    while(*pOpcao < 1 || *pOpcao > 4){
+        printf("Opcao invalida digite novamente \n");
+        scanf("%d",pOpcao);
+        __fpurge(stdin);
+
+    }
+}
+
+void validaOpcaoViagem(int *pOpcao){
+
+    while(*pOpcao < 1 || *pOpcao > 6)
+    {
+        printf("Opcao invalida digite novamente \n");
+        scanf("%d",pOpcao);
+        __fpurge(stdin);
+
+    }
+}
+
+void validaOpcao2Viagem(int *pOpcao){
+
+    while(*pOpcao < 1 || *pOpcao > 9){
+        printf("Opcao invalida digite novamente \n");
+        scanf("%d",pOpcao);
+        __fpurge(stdin);
+
+    }
+}
+
+void validaNomeViagem(char *pNome){
+
+    while(strlen(pNome) == 1){
+        printf("Nome invalido, digite um nome valido\n");
+        fgets(pNome,MAX,stdin);
+
+        __fpurge(stdin);
+    }
+    if (pNome[strlen(pNome) - 1] == '\n'){
+        pNome[strlen(pNome) -1  ] = '\0';
+    }
+    mudaLetraViagem(pNome);
+}
+
+void validaNomeChaveViagem(char *pNome){
+    FILE *pArquivo;
+    destinos listaCadastro;
+
+    if ((pArquivo = fopen("viagem.txt","rt")) == NULL){
+        printf("Erro ao abrir o arquivo");
+        return;
+    }
+
+    while (!feof(pArquivo)){
+        if ((fread(&listaCadastro,sizeof(destinos),1,pArquivo)) == 1){
+            if (strcmp(pNome,listaCadastro.pais) == 0){
+                printf("Pais ja cadastrado, digite um pais novo \n");
+                fgets(pNome,MAX,stdin);
+                validaNomeViagem(pNome);
+                rewind(pArquivo);
+            }
+        }
+    }
+
+    fclose(pArquivo);
+
+}
+
+void validaConfirmaViagem(int *pConfirma){
+
+    while(*pConfirma != 1 && *pConfirma != 0){
+        printf("Opcao invalida digite novamente \n");
+        scanf("%d",pConfirma);
+        __fpurge(stdin);
+    }
+}
+
+void cadastroViagem(){
+    //Declaraões locais
+    destinos cadastrar;
+    FILE *pArquivo;
+    int confirma;
+
+    // Instruções
+    pArquivo=fopen("viagem.txt","a+");
+    if (pArquivo == NULL){
+        printf("Erro ao abrir o arquivo");
+        return;
+    }
+    LIMPA_TELA;
+
+    printf("\t\tCadastrar\n\n");
+
+    printf ("Informe o nome do Pais : \n");
+    fgets(cadastrar.pais,MIN,stdin);
+    __fpurge(stdin);
+
+    validaNomeViagem(cadastrar.pais);
+
+    validaNomeChave(cadastrar.pais);
+
+    __fpurge(stdin);
+////////////////////////////////////////////
+
+    printf("Informe o Continente : \n");
+    fgets(cadastrar.continente,MIN,stdin);
+
+    __fpurge(stdin);
+
+    validaNomeViagem(cadastrar.continente);
+
+    __fpurge(stdin);
+////////////////////////////////////////////
+
+    printf("Informe a Lingua Falada : \n");
+    fgets(cadastrar.lingua,MIN,stdin);
+    __fpurge(stdin);
+
+    validaNomeViagem(cadastrar.lingua);
+
+    __fpurge(stdin);
+////////////////////////////////////////////
+    printf("Informe a Descricao: \n");
+    fgets(cadastrar.descricao,MAX,stdin);
+    __fpurge(stdin);
+
+    validaNomeViagem(cadastrar.descricao);
+
+    __fpurge(stdin);
+////////////////////////////////////////////
+    printf("Informe as Curiosidades: \n");
+    fgets(cadastrar.curiosidades,MAX,stdin);
+    __fpurge(stdin);
+
+    validaNomeViagem(cadastrar.curiosidades);
+
+    __fpurge(stdin);
+////////////////////////////////////////////
+    printf("Informe as Dicas: \n");
+    fgets(cadastrar.dicas,MAX,stdin);
+    __fpurge(stdin);
+
+    validaNomeViagem(cadastrar.dicas);
+    __fpurge(stdin);
+////////////////////////////////////////////
+    printf("Informe os Sites: \n");
+    fgets(cadastrar.sites,MIN,stdin);
+    __fpurge(stdin);
+
+    validaNomeViagem(cadastrar.sites);
+    __fpurge(stdin);
+////////////////////////////////////////////
+
+    printf("\n1 - Salvar\n0 - Cancelar\n");
+    scanf("%d",&confirma);
+
+    __fpurge(stdin);
+
+    validaConfirmaViagem(&confirma);
+    LIMPA_TELA;
+
+    switch(confirma){
+    case 1:
+        if (fwrite(&cadastrar,sizeof(destinos),1,pArquivo) == 1){
+            printf("Faculdade cadastrada\n\n");
+        }
+        else{
+            printf("Erro no cadastro");
+        }
+        break;
+    }
+
+    fclose(pArquivo);
+}
+
+void listaViagem(){
+
+    destinos cadastros;
+    FILE *pArquivos;
+    int contador = 0;
+    int aux = 0;
+    int aux2 = 0;
+    int aux3 = 0;
+    int confirma;
+    destinos *pMalloc;
+
+    LIMPA_TELA;
+    if ((pArquivos = fopen("viagem.txt","a+")) == NULL){
+        printf("Erro ao abrir o arquivo");
+        return;
+    }
+
+    while (fread(&cadastros,sizeof(destinos),1,pArquivos) == 1){
+        contador++;
+    }
+
+    if (contador == 0){
+        LIMPA_TELA;
+        printf("Nenhuma Nenhum Pais para Listar\n\n");
+        return;
+    }
+
+    rewind(pArquivos);
+
+    pMalloc = (destinos *)malloc(contador * sizeof(destinos));
+
+    while (fread(&pMalloc[aux],sizeof(destinos),1,pArquivos) == 1){
+        aux++;
+    }
+
+    for(aux = 0; aux < contador - 1; aux++){
+        for(aux2 = aux + 1; aux2 < contador; aux2++){
+            if (strcmp(pMalloc[aux].pais,pMalloc[aux2].pais) > 0){
+                cadastros = pMalloc[aux2];
+                pMalloc[aux2] = pMalloc[aux];
+                pMalloc[aux] = cadastros;
+            }
+        }
+    }
+
+    printf("\t\tListar\n\n");
+    printf("PAISES: \n");
+
+    while (aux3 != contador){
+        printf("\n%s\n",pMalloc[aux3].pais);
+        aux3++;
+    }
+    printf("\n");
+
+    printf("1 - Voltar\n");
+    scanf("%d",&confirma);
+
+    __fpurge(stdin);
+
+    while(confirma != 1){
+        printf("Opcao invalida digite novamente \n");
+        scanf("%d",&confirma);
+        __fpurge(stdin);
+    }
+
+    LIMPA_TELA;
+
+    fclose(pArquivos);
+
+}
+
+void mudaLetraViagem(char *palavra){
+    int i;
+
+    for (i=0; palavra[i]!='\0'; i++){
+        palavra[i] = toupper(palavra[i]);
+    }
+}
+
+void deletaViagem(){
+
+    FILE *pArquivos;
+    FILE *pArquivosNovo;
+    destinos evento;
+    char pais[MAX];
+    int opt = -1;
+
+    pArquivos  =  fopen("viagem.txt", "r+");
+
+    if(!pArquivos){
+       printf("\nO arquivo nao pode ser encontrado!\n");
+    }
+
+
+     //Verifica se o arquivo está vazio
+    fseek (pArquivos, 0, SEEK_END);
+    if (ftell (pArquivos) == 0){
+        system("clear");
+        printf("Nenhum pais cadastrado!\n\n");
+        return;
+    }
+
+    printf("\nEntre com o nome do pais a ser deletado: \n");
+    fgets(pais,MAX,stdin);
+    system("clear");
+    validaNomeViagem(pais);
+    buscaChaveViagem(pais);
+    if(guardaPosicao == 0){
+        system("clear");
+        printf("Pais nao encontrado no sistema! \n");
+        return;
+    }
+    printf("\nEste é o pais que voce deseja excluir?\n");
+    printf("\n1 - Sim\n");
+    printf("\n0 - Nao\n");
+    scanf("%d", &opt);
+    validaConfirmaViagem(&opt);
+
+    switch(opt){
+        case 1:{
+            system("clear");
+
+            pArquivosNovo = fopen("temp.txt","wt");
+            if(!pArquivosNovo){
+                printf("\nNovo arquivo não pode ser criado!\n");
+            }
+
+            rewind(pArquivos);
+
+            while(!feof(pArquivos)){
+                if(fread(&evento,sizeof(destinos),1,pArquivos) == 1){
+                    if(strcmp(evento.pais,pais)!=0){
+                        if(fwrite(&evento,sizeof(destinos),1,pArquivosNovo) == 1)
+                        {}
+                    }
+                }
+            }
+
+            fclose(pArquivos);
+            fclose(pArquivosNovo);
+
+            remove("viagem.txt");
+            rename("temp.txt","viagem.txt");
+            system("clear");
+            printf("\nO pais foi excluido com sucesso!\n");
+            return;
+            break;
+        }
+        case 0:{
+            system("clear");
+            printf("\nO intem não foi excluido!\n");
+            break;
+        }
+    }
+
+    fclose(pArquivos);
+}
+
+
+void editaDadosViagem(){
+    //Declarações:
+    destinos dados;
+    FILE *pArquivos;
+    FILE *arquivoNovo;
+    int escolha=0;
+    char chave[MAX];
+    int opcao2=0;
+    int confirmacao=0;
+
+    //Instruções:
+    pArquivos = fopen("viagem.txt","r+");
+    if ((pArquivos = fopen("viagem.txt","r+")) == NULL){
+        LIMPA_TELA;
+        printf("Erro ao abrir o arquivo\n\n");
+        return;
+    }
+
+    //Verifica se o arquivo está vazio
+    fseek (pArquivos, 0, SEEK_END);
+    if (ftell (pArquivos) == 0){
+        LIMPA_TELA;
+        printf("Nenhum Pais Cadastrado\n\n");
+        return;
+    }
+    LIMPA_TELA;
+    printf("\t\tALTERAR\n\n");
+
+
+    printf("Informe o nome do pais que deseja alterar \n");
+    fgets(chave,MAX,stdin);
+
+
+
+    __fpurge(stdin);
+
+    validaNomeViagem(chave);
+
+    buscaChaveViagem(chave);
+
+    if(guardaPosicao == 0){
+        LIMPA_TELA;
+        printf("Esse Pais Não Existe!! \n");
+        return;
+    }
+    printf("\nEsse eh o pais que deseja alterar?\n1 - SIM\n0 - NAO\n");
+    scanf("%d",&escolha);
+    __fpurge(stdin);
+
+    validaConfirmaViagem(&escolha);
+
+    if (escolha == 0){
+        return;
+    }
+
+    fseek(pArquivos,((guardaPosicao - 1) * sizeof(destinos)), SEEK_SET);
+
+    fread(&dados,sizeof(destinos),1,pArquivos);
+
+    while (opcao2 != 8){
+        printf("\nInforme o dado que deseja alterar \n");
+        printf("1 - Pais \n2 - Continente \n3 - Lingua Falada \n4 - Descricao \n5 - Curiosidades \n6 - Dicas \n7 - Sites Recomendados \n8 - Sair\n");
+        printf("Escolha a opcao que deseja: ");
+        scanf("%d",&opcao2);
+        __fpurge(stdin);
+
+        validaOpcao2Viagem(&opcao2);
+
+        switch(opcao2){
+   case 1:
+
+            printf("Informe o novo pais \n");
+            fgets(dados.pais,MAX,stdin);
+
+            __fpurge(stdin);
+
+            validaNomeViagem(dados.pais);
+
+            validaNomeChave(dados.pais);
+
+            fseek(pArquivos,((guardaPosicao - 1) * sizeof(destinos)), SEEK_SET);
+
+            if (fwrite(&dados,sizeof(destinos),1,pArquivos) == 1){
+                LIMPA_TELA;
+                printf("\nAlteracao realizada com sucesso\n\n");
+                printf("Pais: %s \n",dados.pais);
+                printf("Continente: %s \n",dados.continente);
+                printf("Lingua Falada: %s \n",dados.lingua);
+                printf("Descricao: %s \n",dados.descricao);
+                printf("Curiosidades: %s \n",dados.curiosidades);
+                printf("Dicas: %s \n",dados.dicas);
+                printf("Sites Recomendados: %s \n\n",dados.sites);
+            }
+            else{
+                printf("Erro\n");
+            }
+            fclose(pArquivos);
+            return;
+            break;
+    case 2:
+            printf("Informe o Novo Continente \n");
+            fgets(dados.continente,MAX,stdin);
+
+
+            __fpurge(stdin);
+
+            validaNomeViagem(dados.continente);
+
+            fseek(pArquivos,((guardaPosicao - 1) * sizeof(destinos)), SEEK_SET);
+
+            if (fwrite(&dados,sizeof(destinos),1,pArquivos) == 1){
+                LIMPA_TELA;
+                printf("\nAlteracao realizada com sucesso\n\n");
+                printf("Pais: %s \n",dados.pais);
+                printf("Continente: %s \n",dados.continente);
+                printf("Lingua Falada: %s \n",dados.lingua);
+                printf("Descricao: %s \n",dados.descricao);
+                printf("Curiosidades: %s \n",dados.curiosidades);
+                printf("Dicas: %s \n",dados.dicas);
+                printf("Sites Recomendados: %s \n\n",dados.sites);
+            }
+            else{
+                printf("Erro\n");
+            }
+            fclose(pArquivos);
+            return;
+            break;
+
+    case 3:
+
+            printf("Informe a Nova Lingua\n");
+            fgets(dados.lingua,MAX,stdin);
+            __fpurge(stdin);
+            validaNomeViagem(dados.lingua);
+
+
+            fseek(pArquivos,((guardaPosicao - 1) * sizeof(destinos)), SEEK_SET);
+
+            if (fwrite(&dados,sizeof(destinos),1,pArquivos) == 1){
+                LIMPA_TELA;
+                printf("\nAlteracao realizada com sucesso\n\n");
+                printf("Pais: %s \n",dados.pais);
+                printf("Continente: %s \n",dados.continente);
+                printf("Lingua Falada: %s \n",dados.lingua);
+                printf("Descricao: %s \n",dados.descricao);
+                printf("Curiosidades: %s \n",dados.curiosidades);
+                printf("Dicas: %s \n",dados.dicas);
+                printf("Sites Recomendados: %s \n\n",dados.sites);
+            }
+            else{
+                printf("Erro\n");
+            }
+            fclose(pArquivos);
+            return;
+            break;
+
+    case 4:
+
+            printf("Informe a Nova Discricao\n");
+            fgets(dados.descricao,MAX,stdin);
+            __fpurge(stdin);
+            validaNomeViagem(dados.descricao);
+
+            fseek(pArquivos,((guardaPosicao - 1) * sizeof(destinos)), SEEK_SET);
+
+            if (fwrite(&dados,sizeof(destinos),1,pArquivos) == 1){
+                  LIMPA_TELA;
+                  printf("\nAlteracao realizada com sucesso\n\n");
+                  printf("Pais: %s \n",dados.pais);
+                  printf("Continente: %s \n",dados.continente);
+                  printf("Lingua Falada: %s \n",dados.lingua);
+                  printf("Descricao: %s \n",dados.descricao);
+                  printf("Curiosidades: %s \n",dados.curiosidades);
+                  printf("Dicas: %s \n",dados.dicas);
+                  printf("Sites Recomendados: %s \n\n",dados.sites);
+                }
+          else{
+                printf("Erro\n");
+                }
+                fclose(pArquivos);
+                return;
+                break;
+
+   case 5:
+                printf("Informe as Novas Curiosidades\n");
+                fgets(dados.curiosidades,MAX,stdin);
+                __fpurge(stdin);
+                validaNomeViagem(dados.curiosidades);
+
+                fseek(pArquivos,((guardaPosicao - 1) * sizeof(destinos)), SEEK_SET);
+
+        if (fwrite(&dados,sizeof(destinos),1,pArquivos) == 1){
+                LIMPA_TELA;
+                printf("\nAlteracao realizada com sucesso\n\n");
+                printf("Pais: %s \n",dados.pais);
+                printf("Continente: %s \n",dados.continente);
+                printf("Lingua Falada: %s \n",dados.lingua);
+                printf("Descricao: %s \n",dados.descricao);
+                printf("Curiosidades: %s \n",dados.curiosidades);
+                printf("Dicas: %s \n",dados.dicas);
+                printf("Sites Recomendados: %s \n\n",dados.sites);
+              }
+      else{
+                printf("Erro\n");
+              }
+                fclose(pArquivos);
+                  return;
+                  break;
+
+  case 6:
+
+              printf("Informe as Novas Dicas\n");
+              fgets(dados.dicas,MAX,stdin);
+              __fpurge(stdin);
+              validaNomeViagem(dados.dicas);
+
+              fseek(pArquivos,((guardaPosicao - 1) * sizeof(destinos)), SEEK_SET);
+
+      if (fwrite(&dados,sizeof(destinos),1,pArquivos) == 1){
+            LIMPA_TELA;
+            printf("\nAlteracao realizada com sucesso\n\n");
+            printf("Pais: %s \n",dados.pais);
+            printf("Continente: %s \n",dados.continente);
+            printf("Lingua Falada: %s \n",dados.lingua);
+            printf("Descricao: %s \n",dados.descricao);
+            printf("Curiosidades: %s \n",dados.curiosidades);
+            printf("Dicas: %s \n",dados.dicas);
+            printf("Sites Recomendados: %s \n\n",dados.sites);
+          }
+    else{
+            printf("Erro\n");
+        }
+          fclose(pArquivos);
+          return;
+          break;
+
+  case 7:
+
+          printf("Informe os Novos Sites Recomendados\n");
+          fgets(dados.sites,MAX,stdin);
+          __fpurge(stdin);
+          validaNomeViagem(dados.sites);
+
+          fseek(pArquivos,((guardaPosicao - 1) * sizeof(destinos)), SEEK_SET);
+
+          if (fwrite(&dados,sizeof(destinos),1,pArquivos) == 1){
+    LIMPA_TELA;
+          printf("\nAlteracao realizada com sucesso\n\n");
+          printf("Pais: %s \n",dados.pais);
+          printf("Continente: %s \n",dados.continente);
+          printf("Lingua Falada: %s \n",dados.lingua);
+          printf("Descricao: %s \n",dados.descricao);
+          printf("Curiosidades: %s \n",dados.curiosidades);
+          printf("Dicas: %s \n",dados.dicas);
+          printf("Sites Recomendados: %s \n\n",dados.sites);
+}
+      else{
+          printf("Erro\n");
+}
+          fclose(pArquivos);
+          return;
+          break;
+        }
+    }
+
+    LIMPA_TELA;
+
+    return;
 }
