@@ -77,15 +77,12 @@ typedef struct
 }vestibular;
 
 
-
 int main(){
 
     siteMenu();
     return 0;
 
 }
-
-
 
 
 //MENU PRINCIPAL DA APLICAÇÃO
