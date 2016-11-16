@@ -201,7 +201,7 @@ void editaDados()
         printf("Aplicativo inexistente!! \n");
         return;
     }
-    printf("\nEssa e o aplicativo que deseja atualizar?\n1 - SIM\n0 - NAO\n");
+    printf("\nEsse e o aplicativo que deseja atualizar?\n1 - SIM\n0 - NAO\n");
     scanf("%d",&escolha);
     __fpurge(stdin);
 
@@ -209,6 +209,7 @@ void editaDados()
 
     if (escolha == 0)
     {
+        LIMPA_TELA;
         return;
     }
 
