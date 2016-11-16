@@ -1280,7 +1280,7 @@ void validaNomeChave(char *pNome)
         {
             if (strcmp(pNome,cadastro.nome) == 0)
             {
-                printf("Nome ja cadastrada, digite um nome novo \n");
+                printf("Nome ja cadastrado, digite um nome novo \n");
                 fgets(pNome,MAX,stdin);
                 validaNome(pNome);
                 rewind(pArquivo);
@@ -1519,10 +1519,10 @@ void editaDados()
         return;
     }
     LIMPA_TELA;
-    printf("\t\tALTERAR\n\n");
+    printf("\t\tATUALIZAR\n\n");
 
 
-    printf("Informe o nome da faculdade que deseja alterar: \n");
+    printf("Informe o nome da faculdade que deseja atualizar: \n");
     fgets(chave,MAX,stdin);
 
 
@@ -1539,7 +1539,7 @@ void editaDados()
         printf("Faculdade inexistente!! \n");
         return;
     }
-    printf("\nEssa e a faculdade que deseja alterar?\n1 - SIM\n0 - NAO\n");
+    printf("\nEssa e a faculdade que deseja atualizar?\n1 - SIM\n0 - NAO\n");
     scanf("%d",&escolha);
     __fpurge(stdin);
 
@@ -1556,7 +1556,7 @@ void editaDados()
 
     while (opcao2 != 5)
     {
-        printf("\nInforme o dado que deseja alterar \n");
+        printf("\nInforme o dado que deseja atualizar \n");
         printf("1. Nome \n2. UF \n3. Tipo \n4. Apagar a faculdade \n5. Sair\n");
         printf("Escolha a opcao que deseja: ");
         scanf("%d",&opcao2);
@@ -1582,7 +1582,7 @@ void editaDados()
             if (fwrite(&dados,sizeof(faculdades),1,pArquivos) == 1)
             {
                 LIMPA_TELA;
-                printf("\nAlteracao realizada com sucesso\n\n");
+                printf("\nAtualizacao realizada com sucesso\n\n");
                 printf("Nome: %s \n",dados.nome);
                 printf("UF: %s \n",dados.uf);
                 printf("Tipo: %s \n",dados.tipo);
@@ -1608,7 +1608,7 @@ void editaDados()
             if (fwrite(&dados,sizeof(faculdades),1,pArquivos) == 1)
             {
                 LIMPA_TELA;
-                printf("\nAlteracao realizada com sucesso\n");
+                printf("\nAtualizacao realizada com sucesso\n");
                 printf("NOME: %s \n",dados.nome);
                 printf("UF: %s \n",dados.uf);
                 printf("TIPO: %s \n",dados.tipo);
@@ -1633,7 +1633,7 @@ void editaDados()
             if (fwrite(&dados,sizeof(faculdades),1,pArquivos) == 1)
             {
                 LIMPA_TELA;
-                printf("\nAlteracao realizada com sucesso\n");
+                printf("\nAtualizacao realizada com sucesso\n");
                 printf("NOME: %s \n",dados.nome);
                 printf("UF: %s \n",dados.uf);
                 printf("TIPO = %s \n",dados.tipo);
