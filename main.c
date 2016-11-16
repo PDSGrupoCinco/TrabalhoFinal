@@ -1547,6 +1547,7 @@ void editaDados()
 
     if (escolha == 0)
     {
+        LIMPA_TELA;
         return;
     }
 
