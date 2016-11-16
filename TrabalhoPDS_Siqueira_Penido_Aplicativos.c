@@ -15,7 +15,7 @@ typedef struct
 
 } aplicativos;
 
-int guardaPosicao = 0;
+int guardaPosicao = 0; //Variavel Global
 
 //Prototipos
 
