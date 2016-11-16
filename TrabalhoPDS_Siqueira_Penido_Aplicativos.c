@@ -40,10 +40,10 @@ int main(void)
 // Declaracoes
     int opcao;
 // Instrucoes
-    while (opcao != 6)
+    while (opcao != 0)
     {
         printf("\t\tAPLICATIVOS PARA INTERCAMBIO\n\n");
-        printf("1. Cadastrar \n2. Alterar \n3. Listar\n4. Buscar\n5. Deletar \n6. Sair\n");
+        printf("1. Cadastrar \n2. Listar \n3. Buscar\n4. Atualizar\n5. Deletar \n0. Voltar\n");
         printf("Escolha a opcao que deseja: ");
         scanf("%d",&opcao);
         __fpurge(stdin);
@@ -54,13 +54,13 @@ int main(void)
             cadastro();
             break;
         case 2:
-            editaDados();
-            break;
-        case 3:
             lista();
             break;
-        case 4:
+        case 3:
             busca();
+            break;
+        case 4:
+            editaDados();
             break;
         case 5:
             deleta();
@@ -68,6 +68,7 @@ int main(void)
         }
 
     }
+    LIMPA_TELA;
     return 0;
 }
 
@@ -178,14 +179,14 @@ void editaDados()
     if (ftell (pArquivos) == 0)
     {
         LIMPA_TELA;
-        printf("Nenhum Aplicativo para alterar\n\n");
+        printf("Nenhum Aplicativo para atualizar\n\n");
         return;
     }
     LIMPA_TELA;
-    printf("\t\tALTERAR\n\n");
+    printf("\t\tATUALIZAR\n\n");
 
 
-    printf("Informe o nome do aplicativo que deseja alterar: \n");
+    printf("Informe o nome do aplicativo que deseja atualizar: \n");
     fgets(chave,MAX,stdin);
 
     __fpurge(stdin);
@@ -200,7 +201,7 @@ void editaDados()
         printf("Aplicativo inexistente!! \n");
         return;
     }
-    printf("\nEssa e o aplicativo que deseja alterar?\n1 - SIM\n0 - NAO\n");
+    printf("\nEssa e o aplicativo que deseja atualizar?\n1 - SIM\n0 - NAO\n");
     scanf("%d",&escolha);
     __fpurge(stdin);
 
@@ -217,7 +218,7 @@ void editaDados()
 
     while (opcao2 != 6)
     {
-        printf("\nInforme o dado que deseja alterar \n");
+        printf("\nInforme o dado que deseja atualizar \n");
         printf("1. Nome \n2. Plataforma \n3. Tamanho \n4. Descricao \n5. Apagar o Aplicativo \n6. Sair\n");
         printf("Escolha a opcao que deseja: ");
         scanf("%d",&opcao2);
@@ -610,7 +611,7 @@ void validaNum (double *num)
 void validaOpcao(int *pOpcao)
 {
 
-    while(*pOpcao < 1 || *pOpcao > 6)
+    while(*pOpcao < 0 || *pOpcao > 5)
     {
         printf("Opcao invalida digite novamente \n");
         scanf("%d",pOpcao);
