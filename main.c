@@ -248,7 +248,7 @@ void vestibulares(){
         printf("2 - Listar\n");
         printf("3 - Buscar\n");
         printf("4 - Atualizar\n");
-        printf("5 - Excluir\n");
+        printf("5 - Deletar\n");
         printf("0 - Voltar\n");
         printf("\nEscolha uma opcao: ");
         scanf("%d", &opcao);
@@ -1097,7 +1097,7 @@ int uniFacul(void)
     while (opcao != 0)
     {
         printf("\t\tFACULDADES\n\n");
-        printf("1. Cadastrar \n2. Alterar \n3. Listar\n4. Buscar\n5. Deletar \n0. Voltar\n");
+        printf("1. Cadastrar \n2. Listar \n3. Buscar\n4. Atualizar\n5. Deletar \n0. Voltar\n");
         printf("\nEscolha a opcao que deseja: ");
         scanf("%d",&opcao);
         __fpurge(stdin);
@@ -1108,13 +1108,13 @@ int uniFacul(void)
             cadastro();
             break;
         case 2:
-            editaDados();
-            break;
-        case 3:
             lista();
             break;
-        case 4:
+        case 3:
             busca();
+            break;
+        case 4:
+            editaDados();
             break;
         case 5:
             deleta();
