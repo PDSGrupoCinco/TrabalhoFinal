@@ -1,0 +1,327 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio_ext.h>
+#define MAX 300
+
+// Parte Lucas S. Souza e Lude Ribeiro
+// Vestibulares - Resultados
+
+typedef struct
+{
+    char nome[MAX];
+    char uf[MAX];
+    char instituicao[MAX];
+    char fase[MAX];
+    char descricao[300];
+    char chamada[MAX];
+    int data[MAX];
+}vestibular;
+
+void exams(){
+	
+    system("clear");
+    int opcao = -1;
+
+    while(opcao != 0){
+
+        printf("\t\t *** Vestibulares  ***\n");
+        printf("1 - Cadastrar\n");
+        printf("2 - Listar\n");
+        printf("3 - Buscar\n");
+        printf("4 - Atualizar\n");
+        printf("5 - Excluir\n");
+        printf("0 - Voltar\n");
+        printf("\nEscolha uma opcao: ");
+        scanf("%d", &opcao);
+        __fpurge(stdin);
+
+        switch (opcao){
+
+            case 1:
+                system("clear");
+                registerExam();
+                break;
+
+            case 2:
+                system("clear");
+                printf("Lista\n");
+                lista();
+                break;
+
+            case 3:
+                system("clear");
+                printf("Buscar\n");
+                break;
+
+            case 4:
+                system("clear");
+                printf("Atualizar\n");
+                break;
+
+            case 5:
+                system("clear");
+                printf("Excluir\n");
+                break;
+
+            case 0:
+                system("clear");
+                //Sai do laço voltando para a função examsMenu()
+                break;
+
+            default:
+                system("clear");
+                printf("Opcao invalida!\n");
+                break;
+        }
+
+    }
+
+}
+
+
+//Cadastrar Vestibular
+
+void registerExam(){
+
+    FILE *arqRegistro;
+    vestibular evento;
+    int opcao = -1;
+
+    arqRegistro = fopen("Vestibulares.txt", "a+");
+
+    if(!arqRegistro){
+        printf("O arquivo nao pode ser encontrado e/ou aberto!");
+        system("PAUSE");
+        return;
+    }
+
+    system("clear");
+    printf("Registre o Vestibular:\n");
+
+    printf("Nome: ");
+    fgets(evento.nome,MAX,stdin);
+    __fpurge(stdin);
+
+    printf("\nInstituicao: ");
+    fgets(evento.instituicao,MAX,stdin);
+    __fpurge(stdin);
+
+    printf("\nUnidade Federativa: ");
+    fgets(evento.uf,MAX,stdin);
+    __fpurge(stdin);
+
+    printf("\nFase: ");
+    fgets(evento.fase,MAX,stdin);
+    __fpurge(stdin);
+
+    printf("\nChamada: ");
+    fgets(evento.chamada,MAX,stdin);
+    __fpurge(stdin);
+
+    printf("\nDescricao: ");
+    fgets(evento.descricao,MAX,stdin);
+    __fpurge(stdin);
+    
+    printf("\nData: ");
+    fgets(evento.data,MAX,stdin);
+    __fpurge(stdin);
+
+    printf("\nDeseja salvar?\n");
+    printf("1 - Sim\n");
+    printf("0 - Nao\n");
+    scanf("%d", &opcao);
+    __fpurge(stdin);
+
+    validaConfirma(&opcao);
+
+    switch(opcao){
+        case 1:
+            system("clear");
+            fprintf(arqRegistro,"%s %s %s %s %s %s\n", evento.nome, evento.instituicao, evento.uf, evento.fase, evento.chamada, evento.descricao);
+            fclose(arqRegistro);
+            break;
+        case 2:
+            printf("Nao Salvar\n");
+            break;
+        default:
+            //Do nothing
+            break;
+    }
+
+}
+
+void validaConfirma(int *pConfirma)
+{
+
+    while(*pConfirma != 1 && *pConfirma != 0)
+    {
+        printf("Opcao invalida digite novamente \n");
+        scanf("%d",pConfirma);
+        __fpurge(stdin);
+    }
+}
+
+
+void listar(){
+	FILE *arqRegistro;
+	vestibular evento;
+	int opcao;
+	char lista[MAX];
+	int cont = 0;
+	int aux = 0;
+	int aux2 = 0;
+	int aux3 = 0;
+	vestibular *pVest;
+
+
+	arqRegistro = fopen ("Vestibular.txt", "r");
+
+	if(!arqRegistro){
+        printf("O arquivo nao pode ser encontrado e/ou aberto!");
+        system("PAUSE");
+        return;
+    }
+
+	system ("clear");
+
+	while (fread(&evento, sizeof(vestibular), 1, arqRegistro) == 1){
+        contador++;
+	}
+
+	rewind(arqRegistro);
+
+	pVest = (vestibular *)malloc(cont * sizeof(vestibular));
+
+    while (fread(&pVest[aux], sizeof(faculdades), 1, pArquivos) == 1){
+    	aux++;
+    }
+
+    for(aux = 0; aux < cont - 1;aux++){
+    	for(aux2 = aux + 1; aux2 < contador;aux2++){
+     		if (strcmp(pVest[aux].nome,pVest[aux2].nome) > 0){
+	            evento = pVest[aux2];
+				pVest[aux2] = pVest[aux];
+				pVest[aux] = cadastros;
+            }
+        }
+	}
+
+    printf("Nome \t\t Instituicao \t\t UF \t\t Fase \t\t Descricao\n");
+
+    while (aux3 != contador){
+        printf("\n%s \t\t %s \t\t %s \t\t %s \t\t %s \n", pVest[aux3].nome, pVest[aux3].uf, pVest[aux3].instituicao, pVest[aux3].descricao, pVest[aux3].chamada);
+        aux3++;
+    }
+
+	fclose(arqRegistro);
+}
+
+void xamaBusca(){
+
+	int opcao;	
+
+	printf("Escolha como deseja buscar o Vestibular desejado.");
+	printf("1- Data de publicacao do resultado.\n");
+	printf("2- Nome(Sigla) da instituicao.\n");
+	printf("3- Chamada ou fase.\n");
+	printf("0- Voltar")
+
+	scanf("%d", &opcao);
+
+	switch (opcao){
+		
+		case 1:
+			system("clear");
+			buscaData();
+			
+		case 2:
+			system("clear");
+			buscaNome();
+			
+		case 3:
+			system("clear");
+			buscaFase();
+			
+		case 0:
+			system("clear");
+			//volta para o menu de vestibular
+			
+		default:
+			printf("Opcao invalida. Digite uma opcao valida:\n");
+			scanf("%d", &opcao);
+	}	
+}
+
+void bucaData(){
+
+	FILE *arqRegistro
+	vestibular evento;
+	int data;
+	int aux;
+	int aux2;
+	int aux3;
+	int contador;
+	char nome;
+	vestibular *pVest
+
+	printf("Digite o nome(sigla) da faculdade que deseja encontrar.")
+
+	scanf()
+
+	arqRegistro = fopen("Vestibular.txt", "r");
+
+	if(!arqRegistro){
+        printf("O arquivo nao pode ser encontrado e/ou aberto!");
+        system("PAUSE");
+        return;
+    }
+
+	while (fread(&evento, sizeof(vestibular), 1, arqRegistro) == 1){
+    	contador++;
+	}
+
+    pVest = (vestibular *)malloc(cont * sizeof(vestibular));
+
+	while (fread(&pVest[aux], sizeof(faculdades), 1, pArquivos) == 1){
+    	aux++;
+	}
+
+	for(aux = 0; aux < cont - 1;aux++){
+    	for(aux2 = aux + 1; aux2 < contador;aux2++){
+     		if (strcmp(pVest[aux].nome,pVest[aux2].nome) > 0){
+	            evento = pVest[aux2];
+				pVest[aux2] = pVest[aux];
+				pVest[aux] = cadastros;
+    		}
+        }
+	}
+	
+	for(aux = 0; aux < cont - 1;aux++){
+    	for(aux2 = aux + 1; aux2 < contador;aux2++){
+    		
+    		
+		}
+	}
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+void atualiza(){
+		
+	
+	
+}
